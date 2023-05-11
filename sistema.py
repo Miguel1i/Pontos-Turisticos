@@ -50,5 +50,3 @@ class Sistema:
         :return:
         """
         pass
-
-
