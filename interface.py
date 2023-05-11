@@ -9,7 +9,7 @@ def menu(sistema: Sistema):
         match ans:
             case '1':
                 sistema.adicionar_ponto()
-            case '2':\
+            case '2':
                 sistema.alterar_ponto()
             case '3':
                 sistema.pesquisar_pontos()
