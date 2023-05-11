@@ -1,0 +1,8 @@
+menu = """ *********** Menu *************
+1: Adicionar ponto de interesse
+2: Alterar ponto de interesse
+3: Pesquisar ponto de interesse
+4: Assinalar e Avaliar ponto de interesse
+5: Consultar estatisticas de visistas aos ponto de interesse
+6: Obter sugestões de visitas a pontos de interesse
+"""

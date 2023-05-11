@@ -1,6 +1,5 @@
 class Node:
     """ Represents a linked node"""
-
     def __init__(self, data, next=None):
         """
         Sets the initial state of self.

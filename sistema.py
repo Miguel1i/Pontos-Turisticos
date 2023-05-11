@@ -1,10 +1,13 @@
-class Sistema:
+import pontointeresse
+from node import Node
 
+
+class Sistema:
     def __init__(self):
         """
         Método construtor da classe Sistema
         """
-        pass
+        self._pontos_interesse: Node = Node(None)
 
     def adicionar_ponto(self) -> None:
         """
