@@ -1,3 +1,4 @@
+import pontointeresse
 from sistema import Sistema
 from variable import menu as m
 

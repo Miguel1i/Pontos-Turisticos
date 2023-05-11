@@ -1,5 +1,5 @@
-import pontointeresse
-from node import Node
+from pontointeresse import Ponto
+import json
 
 
 class Sistema:
@@ -7,9 +7,13 @@ class Sistema:
         """
         Método construtor da classe Sistema
         """
-        self._pontos_interesse: Node = Node(None)
+        self.pontos_interesse = None
+        with open("pontos-interesse.json", "r") as f:
+            data = json.load(f)
+            for p in data:
+                ponto = Ponto(data[p]['designacao'], data[p]['morada'], data[p]['latitude'], data[p]['longitude'], data[p]['categoria'], data[p]['acess'])
 
-    def adicionar_ponto(self) -> None:
+    def adicionar_ponto(self, ponto: Ponto) -> None:
         """
         Permite adicionar um novo ponto de interesse turístico.
         :return: None
