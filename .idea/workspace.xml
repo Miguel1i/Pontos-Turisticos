@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b62d7ea-d926-46c2-9976-09b02e633e93" name="Changes" comment="" />
+    <list default="true" id="9b62d7ea-d926-46c2-9976-09b02e633e93" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/doublenode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pontointeresse.py" beforeDir="false" afterPath="$PROJECT_DIR$/pontointeresse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pontos-interesse.json" beforeDir="false" afterPath="$PROJECT_DIR$/pontos-interesse.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/sistema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teste_drive.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste_drive.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

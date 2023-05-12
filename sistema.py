@@ -1,5 +1,6 @@
 from pontointeresse import Ponto
 import json
+from doublenode import LinkedList
 
 
 class Sistema:
@@ -7,41 +8,36 @@ class Sistema:
         """
         Método construtor da classe Sistema
         """
-        self.pontos_interesse = None
-        with open("pontos-interesse.json", "r") as f:
-            data = json.load(f)
-            for p in data:
-                ponto = Ponto(data[p]['designacao'], data[p]['morada'], data[p]['latitude'], data[p]['longitude'], data[p]['categoria'], data[p]['acess'])
+        self.pontos_interesse = LinkedList()
 
     def adicionar_ponto(self, ponto: Ponto) -> None:
         """
-        Permite adicionar um novo ponto de interesse turístico.
+        Permite adicionar um novo ponto de interesse turísti
         :return: None
         """
-        pass
+        self.pontos_interesse.add(ponto)
 
-    def alterar_ponto(self) -> None:
+    def alterar_ponto(self, _id, categoria, acess) -> None:
         """
         Permite alterar as categorias e acessibilidade de um ponto de interesse turístico
         :return: None
         """
-        pass
+        self.pontos_interesse.altera(_id, categoria, acess)
 
     def pesquisar_pontos(self):
         """
         Permite pesquisar pontos de interesse turísticos por categorias.
         :return:
         """
+        self.pontos_interesse.print_lista()
 
-        pass
-
-    def assinalar_avaliar_ponto(self):
+    def assinalar_avaliar_ponto(self, _id, avaliacao: int):
         """
         Permite incrementar numa unidade o contador de visitas de um ponto de interesse turístico e atualizar as
         classificações da experiência da visita nesse ponto.
         :return:
         """
-        pass
+        self.pontos_interesse.assinala_avalia(_id, avaliacao)
 
     def consultar_estatisticas(self):
         """
@@ -57,3 +53,7 @@ class Sistema:
         :return:
         """
         pass
+
+
+    def get_last_id(self):
+        return self.pontos_interesse.get_last_id()
