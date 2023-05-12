@@ -5,4 +5,8 @@ menu = """ *********** Menu *************
 4: Assinalar e Avaliar ponto de interesse
 5: Consultar estatisticas de visistas aos ponto de interesse
 6: Obter sugestões de visitas a pontos de interesse
+0: Sair
+*********** END *************
 """
+
+R = 6371

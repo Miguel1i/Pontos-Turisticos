@@ -19,19 +19,25 @@ def menu(sistema: Sistema):
                 ponto = Ponto(_id, designacao, morada, latitude, longitude, categoria, acess)
                 sistema.adicionar_ponto(ponto)
             case '2':
-                #sistema.alterar_ponto()
-                pass
+                sistema.listar_pontos()
+                _id = int(input('ID: '))
+                categoria = str(input('Categoria: '))
+                acess = str(input('Acessibilidade: '))
+                sistema.alterar_ponto(_id, categoria, acess)
             case '3':
-                sistema.pesquisar_pontos()
+                categoria = str(input('Categoria: '))
+                sistema.pesquisar_pontos(categoria)
             case '4':
-                print(sistema.pesquisar_pontos())
+                sistema.listar_pontos()
                 _id = int(input("id: "))
                 avaliacao = int(input("Avalia 1-4: "))
                 sistema.assinalar_avaliar_ponto(_id, avaliacao)
             case '5':
                 sistema.consultar_estatisticas()
             case '6':
-                sistema.obter_sugestoes()
+                latitude = float(input('Latitude: '))
+                longitude = float(input('Longitude: '))
+                sistema.obter_sugestoes(latitude, longitude)
             case '0':
                 break
             case _:

@@ -43,7 +43,13 @@ class Ponto:
         self._coordenada = Coordenada(latitude, longitude)
 
     def get_coordenadas(self):
-        return str(self._coordenada)
+        return self._coordenada
+
+    def get_visitas(self):
+        return self._visitas
+
+    def get_avaliacao(self):
+        return self._avaliacao
 
     def set_avaliacao(self, avaliacao: int):
         self._avaliacao.append(avaliacao)
@@ -52,6 +58,6 @@ class Ponto:
         self._visitas += 1
 
     def __str__(self):
-        return f'ID: {self._id_ponto} \nCategoria: {self._categoria} \nMorada: {self._morada} \nCoordenadas: {self._coordenada} \nAcessibilidade: {self._acessibilidade}' \
-               f'\nAvaliação: {self._avaliacao} \nVisitas: {self._visitas}'
+        return f'\nID: {self._id_ponto} \nDesignação: {self._desgignacao} \nCategoria: {self._categoria} \nMorada: {self._morada} \nCoordenadas: {self._coordenada} \nAcessibilidade: {self._acessibilidade}' \
+               f'\nAvaliação: {self._avaliacao} \nVisitas: {self._visitas}\n'
 
