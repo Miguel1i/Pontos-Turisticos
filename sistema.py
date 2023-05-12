@@ -59,3 +59,7 @@ class Sistema:
 
     def get_last_id(self):
         return self.pontos_interesse.get_last_id()
+
+
+    def grava(self):
+        self.pontos_interesse.grava()

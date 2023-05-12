@@ -1,11 +1,42 @@
 {
-  "1" : {
-    "designacao" : "Lagoa do Fogo",
+  "1": {
+    "id": 1,
+    "designacao": "Miradouro Lagoa do Fogo",
     "Morada": "Rua dsfssafs",
-    "Latitude" : 37.749997,
+    "Latitude": 37.749997,
     "Longitude": -25.4666648,
     "categoria": "Natureza",
-    "acess": "estrada"
+    "acess": [
+      "rampas"
+    ],
+    "geo": [
+      "Parque estacionamento"
+    ],
+    "Suges": [
+      "Bife a regional"
+    ],
+    "avaliacao": [
+      4
+    ],
+    "visitas": 1
+  },
+  "2": {
+    "id": 2,
+    "designacao": "dsada",
+    "Morada": "dsadsa",
+    "Latitude": 3232.0,
+    "Longitude": 222221.0,
+    "categoria": "dfsdfds",
+    "acess": [
+      "fdfsfs"
+    ],
+    "geo": [
+      "ffdsfds"
+    ],
+    "Suges": [
+      "fsfs"
+    ],
+    "avaliacao": [],
+    "visitas": 0
   }
-
 }

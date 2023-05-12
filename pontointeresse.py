@@ -1,19 +1,19 @@
 from coordenada import Coordenada
-
-
+from typing import Optional
 class Ponto:
 
-    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: str, acessibilidade=None):
-        if acessibilidade is None:
-            acessibilidade = []
+    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: str,
+                 acessibilidade: Optional['list'], visitas: int, avaliacao: list, geografica=None, sugestoes=None,):
         self._id_ponto = id_ponto
         self._desgignacao: str = desigancao
         self._morada: str = morada
         self._coordenada: Coordenada = Coordenada(latitude, longitude)
         self._categoria: str = categoria
         self._acessibilidade = acessibilidade
-        self._avaliacao = []
-        self._visitas = 0
+        self._geografica = geografica
+        self._sugestoes = sugestoes
+        self._avaliacao = avaliacao
+        self._visitas = visitas
 
     def get_id(self):
         return self._id_ponto
@@ -57,7 +57,17 @@ class Ponto:
     def set_visitas(self):
         self._visitas += 1
 
-    def __str__(self):
-        return f'\nID: {self._id_ponto} \nDesignação: {self._desgignacao} \nCategoria: {self._categoria} \nMorada: {self._morada} \nCoordenadas: {self._coordenada} \nAcessibilidade: {self._acessibilidade}' \
-               f'\nAvaliação: {self._avaliacao} \nVisitas: {self._visitas}\n'
+    def get_sugestoes(self):
+        return self._sugestoes
 
+    def get_geo(self):
+        return self._geografica
+
+    def set_acess(self, acess: str):
+        self._acessibilidade.append(acess)
+    def __str__(self):
+        return f'\nID: {self._id_ponto} \nDesignação: {self._desgignacao} \nCategoria: {self._categoria}' \
+               f' \nMorada: {self._morada}' \
+               f' \nCoordenadas: {self._coordenada} \nAcessibilidade: {str(self._acessibilidade)}' \
+               f' \ngeografica: {str(self._geografica)} \nSugestoes: {str(self._sugestoes)}' \
+               f'\nAvaliação: {str(self._avaliacao)} \nVisitas: {self._visitas}\n'

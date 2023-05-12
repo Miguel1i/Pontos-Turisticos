@@ -16,7 +16,9 @@ def menu(sistema: Sistema):
                 longitude = float(input("Longitude: "))
                 categoria = str(input("Categoria: "))
                 acess = str(input("Acessiblidade: "))
-                ponto = Ponto(_id, designacao, morada, latitude, longitude, categoria, acess)
+                geo = str(input("Geografica:"))
+                suges = str(input("Sugestoes: "))
+                ponto = Ponto(_id, designacao, morada, latitude, longitude, categoria, [acess], 0, [], [geo], [suges])
                 sistema.adicionar_ponto(ponto)
             case '2':
                 sistema.listar_pontos()
@@ -39,6 +41,7 @@ def menu(sistema: Sistema):
                 longitude = float(input('Longitude: '))
                 sistema.obter_sugestoes(latitude, longitude)
             case '0':
+                sistema.grava()
                 break
             case _:
                 print("Opcao inválida!")

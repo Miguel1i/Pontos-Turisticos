@@ -1,3 +1,4 @@
+import json
 from pontointeresse import Ponto
 from typing import Optional
 import math as m
@@ -6,10 +7,10 @@ from variable import R
 
 class DoubleNode:
 
-    def __init__(self, data: Ponto, previous: Optional['Ponto'] = None, next: Optional['Ponto'] = None):
+    def __init__(self, data: Ponto, previous: Optional['Ponto'] = None, _next: Optional['Ponto'] = None):
         self._data = data
         self._previous = previous
-        self._next = next
+        self._next = _next
 
     def get_next(self):
         return self._next
@@ -31,6 +32,13 @@ class LinkedList:
 
     def __init__(self):
         self._head = None
+        with open("pontos-interesse.json", "r") as f:
+            data = json.load(f)
+            for p in data:
+                ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
+                              data[p]["Longitude"], data[p]["categoria"], data[p]["acess"],data[p]["visitas"],data[p]["avaliacao"],data[p]["geo"],
+                              data[p]["Suges"])
+                self.add(ponto)
 
     def add(self, ponto: Ponto):
         new_node = DoubleNode(ponto)
@@ -91,13 +99,22 @@ class LinkedList:
 
     def consultar_estatisticas(self):
         cursor = self._head
-
         while cursor is not None:
             ponto = cursor.get_data()
-            media = sum(cursor.get_data().get_avaliacao()) / len(cursor.get_data().get_avaliacao())
-            print(
-                f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMédia: {media} \nVisitas: {ponto.get_visitas()}\n')
+            if len(cursor.get_data().get_avaliacao()) > 0:
+                media = sum(cursor.get_data().get_avaliacao()) / len(cursor.get_data().get_avaliacao())
+                print(
+                    f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMorada: {ponto.get_morada()}'
+                    f' \nSugestoes: {str(ponto.get_sugestoes())} '
+                    f'\nMédia: {media} \nVisitas: {ponto.get_visitas()}\n')
+            else:
+                print(
+                    f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMorada: {ponto.get_morada()}'
+                    f' \nSugestoes: {str(ponto.get_sugestoes())} '
+                    f'\nMédia: {0} \nVisitas: {ponto.get_visitas()}\n')
             cursor = cursor.get_next()
+
+
 
     def obter_sugestoes(self, latitude: float, longitude: float):
         cursor = self._head
@@ -145,6 +162,19 @@ class LinkedList:
         ponto = self.pesquisa(_id)
         ponto.set_avaliacao(avalicao)
         ponto.set_visitas()
+
+    def grava(self):
+        cursor = self._head
+        with open("pontos-interesse.json","r") as f:
+            data = json.load(f)
+            while cursor is not None:
+                data.update({str(cursor.get_data().get_id()): {"id": int(cursor.get_data().get_id()), "designacao": str(cursor.get_data().get_designacao()), "Morada": str(cursor.get_data().get_morada()),
+                "Latitude": float(cursor.get_data().get_coordenadas().get_latitude()), "Longitude": float(cursor.get_data().get_coordenadas().get_longitude()), "categoria": str(cursor.get_data().get_categoria()), "acess": cursor.get_data().get_acessibilidade(),
+                "geo": cursor.get_data().get_geo(), "Suges": cursor.get_data().get_sugestoes(), "avaliacao": cursor.get_data().get_avaliacao(), "visitas": cursor.get_data().get_visitas()}})
+                cursor = cursor.get_next()
+
+        with open("pontos-interesse.json", "w") as file:
+            json.dump(data, file, indent=2)
 
 
 def ordena_pesquisa(lista_de_pontos: list):
