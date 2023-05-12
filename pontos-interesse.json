@@ -16,27 +16,9 @@
       "Bife a regional"
     ],
     "avaliacao": [
-      4
+      4,
+      5
     ],
-    "visitas": 1
-  },
-  "2": {
-    "id": 2,
-    "designacao": "dsada",
-    "Morada": "dsadsa",
-    "Latitude": 3232.0,
-    "Longitude": 222221.0,
-    "categoria": "dfsdfds",
-    "acess": [
-      "fdfsfs"
-    ],
-    "geo": [
-      "ffdsfds"
-    ],
-    "Suges": [
-      "fsfs"
-    ],
-    "avaliacao": [],
-    "visitas": 0
+    "visitas": 2
   }
 }

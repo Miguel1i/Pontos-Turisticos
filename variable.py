@@ -10,3 +10,6 @@ menu = """ *********** Menu *************
 """
 
 R = 6371
+
+raio = 50
+json_file = "pontos-interesse.json"

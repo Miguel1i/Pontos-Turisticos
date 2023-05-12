@@ -9,38 +9,61 @@ def menu(sistema: Sistema):
         ans = str(input('Escolha a opção >> '))
         match ans:
             case '1':
+                """
+                Adicionar pontos de interesse
+                """
                 _id = sistema.get_last_id() + 1
-                designacao = str(input("Designacao: "))
-                morada = str(input("Morada: "))
-                latitude = float(input("Latitude: "))
-                longitude = float(input("Longitude: "))
-                categoria = str(input("Categoria: "))
-                acess = str(input("Acessiblidade: "))
-                geo = str(input("Geografica:"))
-                suges = str(input("Sugestoes: "))
-                ponto = Ponto(_id, designacao, morada, latitude, longitude, categoria, [acess], 0, [], [geo], [suges])
+                designacao: str = str(input("Designacao: "))
+                morada: str = str(input("Morada: "))
+                latitude: float = float(input("Latitude: "))
+                longitude: float = float(input("Longitude: "))
+                categoria: str = str(input("Categoria: "))
+                acess: str = str(input("Acessiblidade: "))
+                geo: str = str(input("Geografica:"))
+                suges: str = str(input("Sugestoes: "))
+                ponto: Ponto = Ponto(_id, designacao, morada, latitude, longitude, categoria, [acess], 0, [], [geo],
+                                     [suges])
                 sistema.adicionar_ponto(ponto)
             case '2':
+                '''
+                Lista os pontos existentes, pede ao utilizador um id a alterar e faz as alterações
+                '''
                 sistema.listar_pontos()
-                _id = int(input('ID: '))
-                categoria = str(input('Categoria: '))
-                acess = str(input('Acessibilidade: '))
+                _id: int = int(input('ID: '))
+                categoria: str = str(input('Categoria: '))
+                acess: str = str(input('Acessibilidade: '))
                 sistema.alterar_ponto(_id, categoria, acess)
             case '3':
-                categoria = str(input('Categoria: '))
+                '''
+                Mostra pontos de interesse por certo tipo de categoria
+                '''
+                categoria: str = str(input('Categoria: '))
                 sistema.pesquisar_pontos(categoria)
             case '4':
+                '''
+                Pede um id ao utlizador e avalia um ponto de interesse
+                '''
                 sistema.listar_pontos()
-                _id = int(input("id: "))
-                avaliacao = int(input("Avalia 1-4: "))
+                _id: int = int(input("id: "))
+                avaliacao: int = int(input("Avalia 1-4: "))
                 sistema.assinalar_avaliar_ponto(_id, avaliacao)
             case '5':
+                '''
+                Mostra as estatisticas de todos os pontos de interesse
+                Visitas, Media de avaliação, Morada e designação
+                '''
                 sistema.consultar_estatisticas()
             case '6':
-                latitude = float(input('Latitude: '))
-                longitude = float(input('Longitude: '))
+                '''
+                Calcula pontos de interesses perto atraves de uma localização
+                '''
+                latitude: float = float(input('Latitude: '))
+                longitude: float = float(input('Longitude: '))
                 sistema.obter_sugestoes(latitude, longitude)
             case '0':
+                '''
+                Grava as alterações no json ao sair
+                '''
                 sistema.grava()
                 break
             case _:
