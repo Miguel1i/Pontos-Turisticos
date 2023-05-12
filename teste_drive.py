@@ -1,16 +1,15 @@
 from pontointeresse import Ponto
-import coordenada
-ponto = Ponto('Lagoa do fogo', "rua assa", 37.45045, -25.89347,"natureza")
-print(ponto)
+from doublenode import DoubleNode, LinkedList
+
+ponto = Ponto(1, 'Lagoa', 'Rua do Carvão', 37.99, 23.8, 'natureza')
+ponto2 = Ponto(1, 'Lagoa Do Fogo', 'Rua do Car', 37.76, 25.8, 'natureza')
 
 
-cor = coordenada.Coordenada(37.40304, -25.4343)
+node = DoubleNode(ponto)
+node2 = DoubleNode(ponto2)
 
+lista = LinkedList()
 
-import sistema
-
-
-s = sistema
-
-print()
-
+lista.add(node)
+lista.add(node2)
+lista.print_lista()

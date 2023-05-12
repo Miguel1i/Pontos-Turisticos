@@ -1,12 +1,13 @@
-import coordenada
+from coordenada import Coordenada
 
 
 class Ponto:
 
-    def __init__(self, desigancao: str, morada: str, latitude: float, longitude: float, categoria: str, acessibilidade=None):
+    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: str, acessibilidade=None):
+        self._id_ponto = id_ponto
         self._desgignacao: str = desigancao
         self._morada: str = morada
-        self._coordenada: coordenada = coordenada.Coordenada(latitude, longitude)
+        self._coordenada: Coordenada = Coordenada(latitude, longitude)
         self._categoria: str = categoria
         self._acessibilidade = acessibilidade
         self._avaliacao = []
@@ -34,7 +35,7 @@ class Ponto:
         self._morada = morada
 
     def set_coordenada(self, latitude, longitude):
-        self._coordenada = coordenada.Coordenada(latitude, longitude)
+        self._coordenada = Coordenada(latitude, longitude)
 
     def get_coordenadas(self):
         return str(self._coordenada)

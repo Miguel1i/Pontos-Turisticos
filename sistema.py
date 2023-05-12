@@ -1,5 +1,6 @@
 from pontointeresse import Ponto
 import json
+from doublenode import LinkedList
 
 
 class Sistema:
@@ -7,7 +8,7 @@ class Sistema:
         """
         Método construtor da classe Sistema
         """
-        self.pontos_interesse = None
+        self.pontos_interesse = LinkedList()
         with open("pontos-interesse.json", "r") as f:
             data = json.load(f)
             for p in data:
@@ -15,7 +16,7 @@ class Sistema:
 
     def adicionar_ponto(self, ponto: Ponto) -> None:
         """
-        Permite adicionar um novo ponto de interesse turístico.
+        Permite adicionar um novo ponto de interesse turísti
         :return: None
         """
         pass
