@@ -32,14 +32,21 @@ class LinkedList:
 
     def __init__(self):
         self._head = None
-        with open(json_file, "r") as f:
-            data = json.load(f)
-            for p in data:
-                ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
-                              data[p]["Longitude"], data[p]["categoria"], data[p]["acess"], data[p]["visitas"],
-                              data[p]["avaliacao"], data[p]["geo"],
-                              data[p]["Suges"])
-                self.add(ponto)
+        try:
+            with open(json_file, "r") as f:
+                data = json.load(f)
+                for p in data:
+                    ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
+                                  data[p]["Longitude"], data[p]["categoria"], data[p]["acess"], data[p]["visitas"],
+                                  data[p]["avaliacao"], data[p]["geo"],
+                                  data[p]["Suges"])
+                    self.add(ponto)
+        except:
+            print("Ocurreu um ERRO ao ler o ficheiro")
+            raise
+
+    def get_head(self):
+        return self._head
 
     def add(self, ponto: Ponto) -> None:
         new_node = DoubleNode(ponto)
@@ -65,7 +72,6 @@ class LinkedList:
         cursor = self._head
         while cursor.get_data().get_id() != _id:
             cursor = cursor.get_next()
-
         cursor.get_data().set_categoria(categoria)
         cursor.get_data().set_acessibilidade(acess)
 
@@ -162,28 +168,6 @@ class LinkedList:
         ponto.set_avaliacao(avalicao)
         ponto.set_visitas()
 
-    def grava(self) -> None:
-        cursor = self._head
-        with open(json_file, "r") as f:
-            data = json.load(f)
-            while cursor is not None:
-                data.update({str(cursor.get_data().get_id()): {"id": int(cursor.get_data().get_id()),
-                                                               "designacao": str(cursor.get_data().get_designacao()),
-                                                               "Morada": str(cursor.get_data().get_morada()),
-                                                               "Latitude": float(
-                                                                   cursor.get_data().get_coordenadas().get_latitude()),
-                                                               "Longitude": float(
-                                                                   cursor.get_data().get_coordenadas().get_longitude()),
-                                                               "categoria": str(cursor.get_data().get_categoria()),
-                                                               "acess": cursor.get_data().get_acessibilidade(),
-                                                               "geo": cursor.get_data().get_geo(),
-                                                               "Suges": cursor.get_data().get_sugestoes(),
-                                                               "avaliacao": cursor.get_data().get_avaliacao(),
-                                                               "visitas": cursor.get_data().get_visitas()}})
-                cursor = cursor.get_next()
-
-        with open("pontos-interesse.json", "w") as file:
-            json.dump(data, file, indent=2)
 
 def ordena_pesquisa(lista_de_pontos: list) -> list:
     for i in range(1, len(lista_de_pontos)):

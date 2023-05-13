@@ -1,5 +1,7 @@
 from pontointeresse import Ponto
 from doublenode import LinkedList
+from variable import json_file
+import json
 
 
 class Sistema:
@@ -60,4 +62,33 @@ class Sistema:
         return self.pontos_interesse.get_last_id()
 
     def grava(self):
-        self.pontos_interesse.grava()
+        cursor = self.pontos_interesse.get_head()
+        try:
+            with open(json_file, "r") as f:
+                data = json.load(f)
+                while cursor is not None:
+                    data.update({str(cursor.get_data().get_id()): {"id": int(cursor.get_data().get_id()),
+                                                                   "designacao": str(
+                                                                       cursor.get_data().get_designacao()),
+                                                                   "Morada": str(cursor.get_data().get_morada()),
+                                                                   "Latitude": float(
+                                                                       cursor.get_data().get_coordenadas().get_latitude()),
+                                                                   "Longitude": float(
+                                                                       cursor.get_data().get_coordenadas().get_longitude()),
+                                                                   "categoria": str(cursor.get_data().get_categoria()),
+                                                                   "acess": cursor.get_data().get_acessibilidade(),
+                                                                   "geo": cursor.get_data().get_geo(),
+                                                                   "Suges": cursor.get_data().get_sugestoes(),
+                                                                   "avaliacao": cursor.get_data().get_avaliacao(),
+                                                                   "visitas": cursor.get_data().get_visitas()}})
+                    cursor = cursor.get_next()
+        except:
+            print("Algo correu mal")
+            raise
+
+        try:
+            with open("pontos-interesse.json", "w") as file:
+                json.dump(data, file, indent=2)
+        except:
+            print("Não foi possivel abrir o ficheiro")
+            raise
