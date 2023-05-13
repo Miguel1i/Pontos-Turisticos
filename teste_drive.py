@@ -1,8 +1,8 @@
 from pontointeresse import Ponto
 from doublenode import DoubleNode, LinkedList
 
-ponto = Ponto(1, 'Lagoa', 'Rua do Carvão', 37.99, 23.8, 'natureza')
-ponto2 = Ponto(2, 'Lagoa Do Fogo', 'Rua do Car', 37.76, 25.8, 'natureza')
+ponto = Ponto(1, 'Lagoa', 'Rua do Carvão', 37.99, 23.8, 'natureza', )
+ponto2 = Ponto(2, 'Lagoa Do Fogo', 'Rua do Car', 37.76, 25.8, 'natureza', )
 
 
 
