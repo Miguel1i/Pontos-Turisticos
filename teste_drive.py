@@ -1,21 +1,21 @@
 from pontointeresse import Ponto
-from doublenode import LinkedList
+from doublenode import DoubleNode, LinkedList
+
+ponto = Ponto(1, 'Lagoa', 'Rua do Carvão', 37.99, 23.8, 'natureza', )
+ponto2 = Ponto(2, 'Lagoa Do Fogo', 'Rua do Car', 37.76, 25.8, 'natureza', )
 
 
-ponto2 = Ponto(2, 'Lagoa Do Fogo', 'Rua do Car', 37.76, 25.8, 'natureza', [], 0, [], [])
+
 
 lista = LinkedList()
-head = lista.get_head()
-cursor = head
 
+lista.add(ponto)
 lista.add(ponto2)
-
-while cursor is not None:
-    print(cursor.get_data())
+lista.print_lista()
 
 lista.pesquisa(2)
 
-lista.altera(2, 'restauraçao', 'escadas')
+lista.altera(2,'restauraçao', 'escadas')
 
 lista.pesquisa(2)
 

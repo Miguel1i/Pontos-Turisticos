@@ -1,21 +1,22 @@
 from coordenada import Coordenada
 from typing import Optional
 
-
 class Ponto:
 
-    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: tuple,
-                 acessibilidade: Optional['list'], visitas: int, avaliacao: list, geografica=None, sugestoes=None,):
+
+    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: list,
+                 acessibilidade: Optional['list'], visitas=0, avaliacao=None, geografica=None, sugestoes=None, ):
         self._id_ponto = id_ponto
         self._desgignacao: str = desigancao
         self._morada: str = morada
         self._coordenada: Coordenada = Coordenada(latitude, longitude)
-        self._categoria: tuple = categoria
+        self._categoria: tuple = tuple(categoria)
         self._acessibilidade = acessibilidade
         self._geografica: list = geografica
         self._sugestoes: list = sugestoes
         self._avaliacao: list = avaliacao
         self._visitas: int = visitas
+
 
     def get_id(self) -> int:
         return self._id_ponto
@@ -26,7 +27,7 @@ class Ponto:
     def get_morada(self) -> str:
         return self._morada
 
-    def get_acessibilidade(self) -> list:
+    def get_acessibilidade(self) -> list | str:
         return self._acessibilidade
 
     def get_categoria(self) -> tuple:
@@ -35,8 +36,8 @@ class Ponto:
     def set_acessibilidade(self, item: str) -> None:
         self._acessibilidade.append(item)
 
-    def set_categoria(self, categoria: str) -> None:
-        self._categoria = categoria
+    def set_categoria(self, nova_categoria: tuple) -> None:
+        self._categoria = nova_categoria
 
     def set_morada(self, morada: str) -> None:
         self._morada = morada
@@ -59,10 +60,10 @@ class Ponto:
     def set_visitas(self) -> None:
         self._visitas += 1
 
-    def get_sugestoes(self) -> list:
+    def get_sugestoes(self) -> list | None:
         return self._sugestoes
 
-    def get_geo(self) -> list:
+    def get_geo(self) -> list | str:
         return self._geografica
 
     def set_acess(self, acess: str) -> None:

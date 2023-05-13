@@ -5,9 +5,12 @@
     "Morada": "Rua dsfssafs",
     "Latitude": 37.749997,
     "Longitude": -25.4666648,
-    "categoria": ["Natureza"],
+    "categoria": [
+      "restauracao",
+      "natureza"
+    ],
     "acess": [
-      "rampas"
+      "estrada"
     ],
     "geo": [
       "Parque estacionamento"
@@ -16,9 +19,71 @@
       "Bife a regional"
     ],
     "avaliacao": [
-      4,
-      5
+      4
     ],
-    "visitas": 2
+    "visitas": 4
+  },
+  "4": {
+    "id": 4,
+    "designacao": "Igreja",
+    "Morada": "dsadsa",
+    "Latitude": 4234.0,
+    "Longitude": 432.0,
+    "categoria": [
+      "natureza"
+    ],
+    "acess": [
+      "fdfs"
+    ],
+    "geo": [
+      "fsfds"
+    ],
+    "Suges": [
+      "fsds"
+    ],
+    "avaliacao": [],
+    "visitas": 0
+  },
+  "2": {
+    "id": 2,
+    "designacao": "dsadsa",
+    "Morada": "dsada",
+    "Latitude": 43242.0,
+    "Longitude": 42342.0,
+    "categoria": [
+      "fdfs"
+    ],
+    "acess": [
+      "fdsfds"
+    ],
+    "geo": [
+      "fsdfds"
+    ],
+    "Suges": [
+      "fdsfs"
+    ],
+    "avaliacao": [],
+    "visitas": 0
+  },
+  "3": {
+    "id": 3,
+    "designacao": "dsdas",
+    "Morada": "~dsadsa",
+    "Latitude": 4343.0,
+    "Longitude": 2342.0,
+    "categoria": [
+      "gastronomia"
+    ],
+    "acess": [
+      "dsada"
+    ],
+    "geo": [
+      "dasdsa"
+    ],
+    "Suges": [
+      "dsadsa"
+    ],
+    "avaliacao": [],
+    "visitas": 0
   }
 }
