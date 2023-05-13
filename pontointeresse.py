@@ -4,13 +4,13 @@ from typing import Optional
 
 class Ponto:
 
-    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: str,
+    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: tuple,
                  acessibilidade: Optional['list'], visitas: int, avaliacao: list, geografica=None, sugestoes=None,):
         self._id_ponto = id_ponto
         self._desgignacao: str = desigancao
         self._morada: str = morada
         self._coordenada: Coordenada = Coordenada(latitude, longitude)
-        self._categoria: str = categoria
+        self._categoria: tuple = categoria
         self._acessibilidade = acessibilidade
         self._geografica: list = geografica
         self._sugestoes: list = sugestoes
@@ -29,7 +29,7 @@ class Ponto:
     def get_acessibilidade(self) -> list:
         return self._acessibilidade
 
-    def get_categoria(self) -> str:
+    def get_categoria(self) -> tuple:
         return self._categoria
 
     def set_acessibilidade(self, item: str) -> None:
@@ -69,8 +69,8 @@ class Ponto:
         self._acessibilidade.append(acess)
 
     def __str__(self) -> str:
-        return f'\nID: {self._id_ponto} \nDesignação: {self._desgignacao} \nCategoria: {self._categoria}' \
+        return f'\nID: {self._id_ponto} \nDesignação: {self._desgignacao} \nCategoria: {str(self._categoria)}' \
                f' \nMorada: {self._morada}' \
                f' \nCoordenadas: {self._coordenada} \nAcessibilidade: {str(self._acessibilidade)}' \
-               f' \ngeografica: {str(self._geografica)} \nSugestoes: {str(self._sugestoes)}' \
+               f' \nGeográfica: {str(self._geografica)} \nSugestões: {str(self._sugestoes)}' \
                f'\nAvaliação: {str(self._avaliacao)} \nVisitas: {self._visitas}\n'

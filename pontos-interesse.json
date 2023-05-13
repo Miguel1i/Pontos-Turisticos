@@ -5,7 +5,7 @@
     "Morada": "Rua dsfssafs",
     "Latitude": 37.749997,
     "Longitude": -25.4666648,
-    "categoria": "Natureza",
+    "categoria": ["Natureza"],
     "acess": [
       "rampas"
     ],
