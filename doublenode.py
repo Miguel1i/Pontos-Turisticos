@@ -2,29 +2,54 @@ import json
 from pontointeresse import Ponto
 from typing import Optional
 import math as m
-from constantes import R
+from constantes import R, ficheiro_json
 
 
 class DoubleNode:
 
     def __init__(self, data: Ponto, previous: Optional['Ponto'] = None, _next: Optional['Ponto'] = None):
-        self._data = data
-        self._previous = previous
-        self._next = _next
+        """
+        Inicializa uma nova instância da classe DoubleNode.
+        """
+        self._data: Ponto = data
+        self._previous: Optional['Ponto'] = previous
+        self._next: Optional['Ponto'] = _next
 
-    def get_next(self):
+    def get_next(self) -> Ponto | None:
+        """
+        Obtém o próximo nó da lista encadeada.
+        :returns:
+        Ponto: Objeto Ponto armazenado no nó.
+        None: Se este for o último nó.
+        """
         return self._next
 
-    def get_data(self):
+    def get_data(self) -> Ponto:
+        """
+        Método de obtenção do ponto armazenado no nó.
+        :return: Ponto: Objeto ponto armazenado no nó.
+        """
         return self._data
 
-    def set_next(self, data):
+    def set_next(self, data) -> None:
+        """
+        Define o próximo nó na lista encadeada.
+        :return: None
+        """
         self._next = data
 
-    def set_previous(self, data):
+    def set_previous(self, data) -> None:
+        """
+        Define o nó anterior na lista encadeada.
+        :return: None
+        """
         self._previous = data
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Método de obtenção da representação do objeto Ponto armazenado no nó.
+        :return: Str: ‘String’ que representa o objeto Ponto armazenado no nó
+        """
         return str(self._data)
 
 
@@ -32,11 +57,12 @@ class LinkedList:
 
     def __init__(self):
         self._head = None
-        with open("pontos-interesse.json", "r") as f:
+        with open(ficheiro_json, "r") as f:
             data = json.load(f)
             for p in data:
                 ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
-                              data[p]["Longitude"], data[p]["categoria"], data[p]["acess"],data[p]["visitas"],data[p]["avaliacao"],data[p]["geo"],
+                              data[p]["Longitude"], data[p]["categoria"], data[p]["acess"], data[p]["visitas"],
+                              data[p]["avaliacao"], data[p]["geo"],
                               data[p]["Suges"])
                 self.add(ponto)
 
@@ -114,8 +140,6 @@ class LinkedList:
                     f'\nMédia: {0} \nVisitas: {ponto.get_visitas()}\n')
             cursor = cursor.get_next()
 
-
-
     def obter_sugestoes(self, latitude: float, longitude: float):
         cursor = self._head
         pontos = []
@@ -136,7 +160,7 @@ class LinkedList:
             lon_diference = m.radians(longitude - ponto.get_longitude())
             lat1 = m.radians(latitude)
             lat2 = m.radians(ponto.get_latitude())
-            a = m.sin(lat_diference / 2)**2 + m.cos(lat1) * m.cos(lat2) * m.sin(lon_diference / 2)**2
+            a = m.sin(lat_diference / 2) ** 2 + m.cos(lat1) * m.cos(lat2) * m.sin(lon_diference / 2) ** 2
             c = 2 * m.asin(m.sqrt(a))
             d = R * c
 
@@ -165,19 +189,34 @@ class LinkedList:
 
     def grava(self):
         cursor = self._head
-        with open("pontos-interesse.json","r") as f:
+        with open(ficheiro_json, "r") as f:
             data = json.load(f)
             while cursor is not None:
-                data.update({str(cursor.get_data().get_id()): {"id": int(cursor.get_data().get_id()), "designacao": str(cursor.get_data().get_designacao()), "Morada": str(cursor.get_data().get_morada()),
-                "Latitude": float(cursor.get_data().get_coordenadas().get_latitude()), "Longitude": float(cursor.get_data().get_coordenadas().get_longitude()), "categoria": str(cursor.get_data().get_categoria()), "acess": cursor.get_data().get_acessibilidade(),
-                "geo": cursor.get_data().get_geo(), "Suges": cursor.get_data().get_sugestoes(), "avaliacao": cursor.get_data().get_avaliacao(), "visitas": cursor.get_data().get_visitas()}})
+                data.update({str(cursor.get_data().get_id()): {"id": int(cursor.get_data().get_id()),
+                                                               "designacao": str(cursor.get_data().get_designacao()),
+                                                               "Morada": str(cursor.get_data().get_morada()),
+                                                               "Latitude": float(
+                                                                   cursor.get_data().get_coordenadas().get_latitude()),
+                                                               "Longitude": float(
+                                                                   cursor.get_data().get_coordenadas().get_longitude()),
+                                                               "categoria": str(cursor.get_data().get_categoria()),
+                                                               "acess": cursor.get_data().get_acessibilidade(),
+                                                               "geo": cursor.get_data().get_geo(),
+                                                               "Suges": cursor.get_data().get_sugestoes(),
+                                                               "avaliacao": cursor.get_data().get_avaliacao(),
+                                                               "visitas": cursor.get_data().get_visitas()}})
                 cursor = cursor.get_next()
 
-        with open("pontos-interesse.json", "w") as file:
+        with open(ficheiro_json, "w") as file:
             json.dump(data, file, indent=2)
 
 
-def ordena_pesquisa(lista_de_pontos: list):
+def ordena_pesquisa(lista_de_pontos: list) -> list:
+    """
+    Ordena a lista de objetos Ponto por ordem alfabética da designação.
+    :param lista_de_pontos: List: lista de objetos Ponto a ser ordenada.
+    :return: List: Lista ordenada por ordem alfabética da designação.
+    """
     for i in range(1, len(lista_de_pontos)):
         key = lista_de_pontos[i]
 
@@ -192,34 +231,40 @@ def ordena_pesquisa(lista_de_pontos: list):
     return lista_de_pontos
 
 
-def ordena_sugestoes(lista_de_pontos: list):
+def ordena_sugestoes(lista_de_pontos: list) -> list:
+    """
+    Ordena uma lista de objetos Ponto com base no número de visitas.
+    :param lista_de_pontos: List: lista de objetos Ponto a ser ordenada.
+    :return: List: lista de objetos Ponto ordenada pelo número de visitas.
+    """
+
     if len(lista_de_pontos) > 1:
 
-        r = len(lista_de_pontos) // 2
-        L = lista_de_pontos[:r]
-        M = lista_de_pontos[r:]
+        pivo = len(lista_de_pontos) // 2
+        direita = lista_de_pontos[:pivo]
+        esquerda = lista_de_pontos[pivo:]
 
-        ordena_sugestoes(L)
-        ordena_sugestoes(M)
+        ordena_sugestoes(direita)
+        ordena_sugestoes(esquerda)
 
         i = j = k = 0
 
-        while i < len(L) and j < len(M):
-            if L[i].get_visitas() > M[j].get_visitas():
-                lista_de_pontos[k] = L[i]
+        while i < len(direita) and j < len(esquerda):
+            if direita[i].get_visitas() > esquerda[j].get_visitas():
+                lista_de_pontos[k] = direita[i]
                 i += 1
             else:
-                lista_de_pontos[k] = M[j]
+                lista_de_pontos[k] = esquerda[j]
                 j += 1
             k += 1
 
-        while i < len(L):
-            lista_de_pontos[k] = L[i]
+        while i < len(direita):
+            lista_de_pontos[k] = direita[i]
             i += 1
             k += 1
 
-        while j < len(M):
-            lista_de_pontos[k] = M[j]
+        while j < len(esquerda):
+            lista_de_pontos[k] = esquerda[j]
             j += 1
             k += 1
 
