@@ -59,9 +59,17 @@ class Sistema:
         self.pontos_interesse.obter_sugestoes(latitude, longitude)
 
     def get_last_id(self):
+        """
+        Esta função retorna sempre o ultimo id criado na lista, assim o utilizador nao se preocupa ao inserir um id já utilizado
+        :return:
+        """
         return self.pontos_interesse.get_last_id()
 
     def grava(self):
+        """
+        Grava no ficheiro JSON todas as alterações feitas nos pontos de interesse
+        :return:
+        """
         cursor = self.pontos_interesse.get_head()
         try:
             with open(json_file, "r") as f:
