@@ -1,78 +1,195 @@
-import os
-
 from pontointeresse import Ponto
 from sistema import Sistema
-from variable import menu as m
+from constantes import menu as m
+from os import system
 
 
 def menu(sistema: Sistema):
     while True:
+        system('cls')
         print(m)
         ans = str(input('Escolha a opção >> '))
-        os.system('clear')
         match ans:
             case '1':
-                """
-                Adicionar pontos de interesse
-                """
+                system('cls')
                 _id = sistema.get_last_id() + 1
-                designacao: str = str(input("Designacao: "))
-                morada: str = str(input("Morada: "))
-                latitude: float = float(input("Latitude: "))
-                longitude: float = float(input("Longitude: "))
-                categoria: str = str(input("Categoria: "))
-                acess: str = str(input("Acessiblidade: "))
-                geo: str = str(input("Geografica:"))
-                suges: str = str(input("Sugestoes: "))
-                ponto: Ponto = Ponto(_id, designacao.strip(), morada.strip(), latitude, longitude, categoria.strip(), [acess], 0, [], [geo],
-                                     [suges])
+                designacao = verifica_designacao()
+                morada = verifica_morada()
+                latitude = verifica_latitude()
+                longitude = verifica_longitude()
+                categoria = verifica_categoria()
+                access = verifica_access()
+                geo = verifica_geografica()
+                sugestao = verifica_sugestao()
+                ponto = Ponto(_id, designacao, morada, latitude, longitude, categoria, [access], 0, [], [geo],
+                              [sugestao])
                 sistema.adicionar_ponto(ponto)
-                os.system("clear")
+                system('cls')
             case '2':
-                '''
-                Lista os pontos existentes, pede ao utilizador um id a alterar e faz as alterações
-                '''
+                system('cls')
                 sistema.listar_pontos()
-                _id: int = int(input('ID: '))
-                categoria: str = str(input('Categoria: '))
-                acess: str = str(input('Acessibilidade: '))
-                sistema.alterar_ponto(_id, categoria, acess)
-                os.system("clear")
+                _id = int(input('ID: '))
+                categoria = verifica_categoria()
+                access = verifica_access()
+                sistema.alterar_ponto(_id, categoria, access)
+                system('cls')
             case '3':
-                '''
-                Mostra pontos de interesse por certo tipo de categoria
-                '''
-                categoria: str = str(input('Categoria: '))
+                system('cls')
+                categoria = verifica_categoria()
                 sistema.pesquisar_pontos(categoria)
             case '4':
-                '''
-                Pede um id ao utlizador e avalia um ponto de interesse
-                '''
+                system('cls')
                 sistema.listar_pontos()
-                _id: int = int(input("id: "))
-                avaliacao: int = int(input("Avalia 1-4: "))
-                while avaliacao < 1 or avaliacao > 4:
-                    avaliacao: int = int(input("Avalia 1-4: "))
+                _id = int(input("id: "))
+                avaliacao = verifica_avaliacao()
                 sistema.assinalar_avaliar_ponto(_id, avaliacao)
+                system('cls')
             case '5':
-                '''
-                Mostra as estatisticas de todos os pontos de interesse
-                Visitas, Media de avaliação, Morada e designação
-                '''
-                os.system("clear")
+                system('cls')
                 sistema.consultar_estatisticas()
             case '6':
-                '''
-                Calcula pontos de interesses perto atraves de uma localização
-                '''
-                latitude: float = float(input('Latitude: '))
-                longitude: float = float(input('Longitude: '))
+                system('cls')
+                latitude = verifica_latitude()
+                longitude = verifica_longitude()
                 sistema.obter_sugestoes(latitude, longitude)
             case '0':
-                '''
-                Grava as alterações no json ao sair
-                '''
                 sistema.grava()
                 break
             case _:
-                print("Opcao inválida!")
+                system('cls')
+                print("\nOpção inválida!\n")
+
+
+def verifica_designacao() -> str:
+    """
+    Pede ao utilizador para inserir uma designação e só termina quando esta for válida.
+    :return: Designacao: str
+    """
+    while True:
+        designacao = str(input("Designacao > "))
+        if designacao == '':
+            print('\nIntroduza uma designacão válida.\n')
+        else:
+            break
+
+    return designacao
+
+
+def verifica_categoria() -> str:
+    """
+    Pede ao utilizador para inserir uma categoria e só termina quando esta for válida.
+    :return: Categoria: str
+    """
+    while True:
+        categoria = str(input("Categoria > "))
+        if categoria == '':
+            print('\nIntroduza uma categoria válida.\n')
+        else:
+            break
+    return categoria
+
+
+def verifica_avaliacao() -> int:
+    """
+    Pede ao utilizador para introduzir uma avaliaçao e só termina quando esta for 1, 2, 3 ou 4.
+    :return: Avalicao: int
+    """
+    while True:
+        try:
+            avaliacao = int(input('Avaliação [1-4] > '))
+            if avaliacao in [1, 2, 3, 4]:
+                break
+        except ValueError:
+            print('\nIntroduza uma avaliação válida.\n')
+
+    return avaliacao
+
+
+def verifica_latitude() -> float:
+    """
+    Pede ao utilizador para introduzir uma latitude e só termina quando esta for válida.
+    :return: Latitude: float
+    """
+    while True:
+        try:
+            latitude = float(input('Latitude > '))
+            break
+        except ValueError:
+            print('\nIntroduza uma latitude válida.\n')
+
+    return latitude
+
+
+def verifica_longitude() -> float:
+    """
+    Pede ao utilizador para introduzir uma longitude e só termina quando esta for válida.
+    :return: Longitude: float
+    """
+    while True:
+        try:
+            longitude = float(input('Longitude > '))
+            break
+        except ValueError:
+            print('\nIntroduza uma longitude válida.\n')
+
+    return longitude
+
+
+def verifica_access() -> str:
+    """
+    Pede ao utilizador para introduzir um acesso e só termina quando esta for válida.
+    :return: Acesso: str
+    """
+    while True:
+        access = str(input('Acesso > '))
+        if access == '':
+            print('\nIntroduza um acesso válido.\n')
+        else:
+            break
+
+    return access
+
+
+def verifica_morada() -> str:
+    """
+    Pede ao utilizador para introduzir uma morada e só termina quando esta for válida.
+    :return: Morada: str
+    """
+    while True:
+        morada = str(input('Morada > '))
+        if morada == '':
+            print('\nIntroduza uma morada válida.\n')
+        else:
+            break
+
+    return morada
+
+
+def verifica_sugestao() -> str:
+    """
+    Pede ao utilizador para introduzir uma sugestão e só termina quando esta for válida.
+    :return: Sugestao: str
+    """
+    while True:
+        sugestao = str(input('Sugestão > '))
+        if sugestao == '':
+            print('\nIntroduza uma sugestão válida.\n')
+        else:
+            break
+
+    return sugestao
+
+
+def verifica_geografica() -> str:
+    """
+    Pede ao utilizador para introduzir uma geografica e só termina quando esta for válida.
+    :return: Geo: str
+    """
+    while True:
+        geo = str(input("Geografica > "))
+        if geo == '':
+            print('\nIntroduza uma geografia válida.\n')
+        else:
+            break
+
+    return geo

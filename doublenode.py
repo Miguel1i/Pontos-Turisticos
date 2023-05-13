@@ -2,14 +2,14 @@ import json
 from pontointeresse import Ponto
 from typing import Optional
 import math as m
-from variable import R, raio, json_file
+from constantes import R
 
 
 class DoubleNode:
 
-    def __init__(self, _data: Ponto, _previous: Optional['Ponto'] = None, _next: Optional['Ponto'] = None):
-        self._data = _data
-        self._previous = _previous
+    def __init__(self, data: Ponto, previous: Optional['Ponto'] = None, _next: Optional['Ponto'] = None):
+        self._data = data
+        self._previous = previous
         self._next = _next
 
     def get_next(self):
@@ -32,23 +32,15 @@ class LinkedList:
 
     def __init__(self):
         self._head = None
-        try:
-            with open(json_file, "r") as f:
-                data = json.load(f)
-                for p in data:
-                    ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
-                                  data[p]["Longitude"], data[p]["categoria"], data[p]["acess"], data[p]["visitas"],
-                                  data[p]["avaliacao"], data[p]["geo"],
-                                  data[p]["Suges"])
-                    self.add(ponto)
-        except:
-            print("Ocurreu um ERRO ao ler o ficheiro")
-            raise
+        with open("pontos-interesse.json", "r") as f:
+            data = json.load(f)
+            for p in data:
+                ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
+                              data[p]["Longitude"], data[p]["categoria"], data[p]["acess"],data[p]["visitas"],data[p]["avaliacao"],data[p]["geo"],
+                              data[p]["Suges"])
+                self.add(ponto)
 
-    def get_head(self):
-        return self._head
-
-    def add(self, ponto: Ponto) -> None:
+    def add(self, ponto: Ponto):
         new_node = DoubleNode(ponto)
         if self._head is None:
             self._head = new_node
@@ -58,7 +50,7 @@ class LinkedList:
                 cursor = cursor.get_next()
             cursor.set_next(new_node)
 
-    def print_lista(self) -> None:
+    def print_lista(self):
         cursor = self._head
         if cursor is None:
             print('Lista Vazia.')
@@ -68,20 +60,21 @@ class LinkedList:
                 print()
                 cursor = cursor.get_next()
 
-    def altera(self, _id: int, categoria: str, acess) -> None:
+    def altera(self, _id, categoria, acess):
         cursor = self._head
         while cursor.get_data().get_id() != _id:
             cursor = cursor.get_next()
+
         cursor.get_data().set_categoria(categoria)
         cursor.get_data().set_acessibilidade(acess)
 
-    def pesquisa(self, _id: int) -> Ponto:
+    def pesquisa(self, _id: int):
         cursor = self._head
         while cursor.get_data().get_id() != _id:
             cursor = cursor.get_next()
         return cursor.get_data()
 
-    def pesquisa_por_categoria(self, _categoria: str) -> None:
+    def pesquisa_por_categoria(self, _categoria: str):
         cursor = self._head
         pontos = []
 
@@ -104,7 +97,7 @@ class LinkedList:
         if flag == 1:
             print('Não existe nenhum Ponto de Interesse com esta categoria.')
 
-    def consultar_estatisticas(self) -> None:
+    def consultar_estatisticas(self):
         cursor = self._head
         while cursor is not None:
             ponto = cursor.get_data()
@@ -121,7 +114,9 @@ class LinkedList:
                     f'\nMédia: {0} \nVisitas: {ponto.get_visitas()}\n')
             cursor = cursor.get_next()
 
-    def obter_sugestoes(self, latitude: float, longitude: float) -> None:
+
+
+    def obter_sugestoes(self, latitude: float, longitude: float):
         cursor = self._head
         pontos = []
 
@@ -141,11 +136,11 @@ class LinkedList:
             lon_diference = m.radians(longitude - ponto.get_longitude())
             lat1 = m.radians(latitude)
             lat2 = m.radians(ponto.get_latitude())
-            a = m.sin(lat_diference / 2) ** 2 + m.cos(lat1) * m.cos(lat2) * m.sin(lon_diference / 2) ** 2
+            a = m.sin(lat_diference / 2)**2 + m.cos(lat1) * m.cos(lat2) * m.sin(lon_diference / 2)**2
             c = 2 * m.asin(m.sqrt(a))
             d = R * c
 
-            if d <= raio:
+            if d <= 50:
                 print(cursor.get_data())
                 flag += 1
 
@@ -154,7 +149,7 @@ class LinkedList:
         if flag == 1:
             print('Não existe nenhum Ponto de Interesse perto.')
 
-    def get_last_id(self) -> int:
+    def get_last_id(self):
         cursor = self._head
         if self._head is None:
             return 0
@@ -163,13 +158,26 @@ class LinkedList:
                 cursor = cursor.get_next()
             return cursor.get_data().get_id()
 
-    def assinala_avalia(self, _id: int, avalicao: int) -> None:
+    def assinala_avalia(self, _id, avalicao: int):
         ponto = self.pesquisa(_id)
         ponto.set_avaliacao(avalicao)
         ponto.set_visitas()
 
+    def grava(self):
+        cursor = self._head
+        with open("pontos-interesse.json","r") as f:
+            data = json.load(f)
+            while cursor is not None:
+                data.update({str(cursor.get_data().get_id()): {"id": int(cursor.get_data().get_id()), "designacao": str(cursor.get_data().get_designacao()), "Morada": str(cursor.get_data().get_morada()),
+                "Latitude": float(cursor.get_data().get_coordenadas().get_latitude()), "Longitude": float(cursor.get_data().get_coordenadas().get_longitude()), "categoria": str(cursor.get_data().get_categoria()), "acess": cursor.get_data().get_acessibilidade(),
+                "geo": cursor.get_data().get_geo(), "Suges": cursor.get_data().get_sugestoes(), "avaliacao": cursor.get_data().get_avaliacao(), "visitas": cursor.get_data().get_visitas()}})
+                cursor = cursor.get_next()
 
-def ordena_pesquisa(lista_de_pontos: list) -> list:
+        with open("pontos-interesse.json", "w") as file:
+            json.dump(data, file, indent=2)
+
+
+def ordena_pesquisa(lista_de_pontos: list):
     for i in range(1, len(lista_de_pontos)):
         key = lista_de_pontos[i]
 
@@ -184,34 +192,34 @@ def ordena_pesquisa(lista_de_pontos: list) -> list:
     return lista_de_pontos
 
 
-def ordena_sugestoes(lista_de_pontos: list) -> list:
+def ordena_sugestoes(lista_de_pontos: list):
     if len(lista_de_pontos) > 1:
 
         r = len(lista_de_pontos) // 2
-        ll = lista_de_pontos[:r]
-        mm = lista_de_pontos[r:]
+        L = lista_de_pontos[:r]
+        M = lista_de_pontos[r:]
 
-        ordena_sugestoes(ll)
-        ordena_sugestoes(mm)
+        ordena_sugestoes(L)
+        ordena_sugestoes(M)
 
         i = j = k = 0
 
-        while i < len(ll) and j < len(mm):
-            if ll[i].get_visitas() > mm[j].get_visitas():
-                lista_de_pontos[k] = ll[i]
+        while i < len(L) and j < len(M):
+            if L[i].get_visitas() > M[j].get_visitas():
+                lista_de_pontos[k] = L[i]
                 i += 1
             else:
-                lista_de_pontos[k] = mm[j]
+                lista_de_pontos[k] = M[j]
                 j += 1
             k += 1
 
-        while i < len(ll):
-            lista_de_pontos[k] = ll[i]
+        while i < len(L):
+            lista_de_pontos[k] = L[i]
             i += 1
             k += 1
 
-        while j < len(mm):
-            lista_de_pontos[k] = mm[j]
+        while j < len(M):
+            lista_de_pontos[k] = M[j]
             j += 1
             k += 1
 
