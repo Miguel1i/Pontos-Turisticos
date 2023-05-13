@@ -17,13 +17,11 @@
     "Suges": [
       "Observacao de passaros"
     ],
-    "avaliacao": [
-      4
-    ],
-    "visitas": 4
+    "avaliacao": [],
+    "visitas": 0
   },
   "2": {
-    "id": 4,
+    "id": 2,
     "designacao": "Restaurante Jose do Rego",
     "Morada": "Rua Nossa Senhora das Necessidades 30, Atalhada, 9560-418 Lagoa",
     "Latitude": 37.746911371395626,
