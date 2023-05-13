@@ -6,7 +6,6 @@ from os import system
 
 def menu(sistema: Sistema):
     while True:
-        system('cls')
         print(m)
         ans = str(input('Escolha a opção >> '))
         match ans:
@@ -21,14 +20,22 @@ def menu(sistema: Sistema):
                 access = verifica_access()
                 geo = verifica_geografica()
                 sugestao = verifica_sugestao()
-                ponto = Ponto(_id, designacao, morada, latitude, longitude, categoria, [access], 0, [], [geo],
+                ponto = Ponto(_id, designacao, morada, latitude, longitude, [categoria], [access], 0, [], [geo],
                               [sugestao])
                 sistema.adicionar_ponto(ponto)
                 system('cls')
             case '2':
                 system('cls')
                 sistema.listar_pontos()
-                _id = int(input('ID: '))
+                while True:
+                    try:
+                        _id = int(input("ID > "))
+                        if sistema.verifica_id(_id):
+                            break
+                        else:
+                            print('\nNão existe nenhum ponto de interesse com esse ID\n')
+                    except ValueError:
+                        print('\nIntroduza um número válido.\n')
                 categoria = verifica_categoria()
                 access = verifica_access()
                 sistema.alterar_ponto(_id, categoria, access)
@@ -40,7 +47,15 @@ def menu(sistema: Sistema):
             case '4':
                 system('cls')
                 sistema.listar_pontos()
-                _id = int(input("id: "))
+                while True:
+                    try:
+                        _id = int(input("ID > "))
+                        if sistema.verifica_id(_id):
+                            break
+                        else:
+                            print('\nNão existe nenhum ponto de interesse com esse ID.\n')
+                    except ValueError:
+                        print('\nIntroduza um número válido.\n')
                 avaliacao = verifica_avaliacao()
                 sistema.assinalar_avaliar_ponto(_id, avaliacao)
                 system('cls')
@@ -82,7 +97,7 @@ def verifica_categoria() -> str:
     """
     while True:
         categoria = str(input("Categoria > "))
-        if categoria == '':
+        if not categoria:
             print('\nIntroduza uma categoria válida.\n')
         else:
             break
@@ -97,7 +112,9 @@ def verifica_avaliacao() -> int:
     while True:
         try:
             avaliacao = int(input('Avaliação [1-4] > '))
-            if avaliacao in [1, 2, 3, 4]:
+            if avaliacao > 4 or avaliacao < 1:
+                print('\nIntroduza um valor entre 1 e 4.\n')
+            else:
                 break
         except ValueError:
             print('\nIntroduza uma avaliação válida.\n')
@@ -157,7 +174,7 @@ def verifica_morada() -> str:
     """
     while True:
         morada = str(input('Morada > '))
-        if morada == '':
+        if not morada:
             print('\nIntroduza uma morada válida.\n')
         else:
             break
@@ -172,7 +189,7 @@ def verifica_sugestao() -> str:
     """
     while True:
         sugestao = str(input('Sugestão > '))
-        if sugestao == '':
+        if not sugestao:
             print('\nIntroduza uma sugestão válida.\n')
         else:
             break
@@ -187,7 +204,7 @@ def verifica_geografica() -> str:
     """
     while True:
         geo = str(input("Geografica > "))
-        if geo == '':
+        if not geo:
             print('\nIntroduza uma geografia válida.\n')
         else:
             break

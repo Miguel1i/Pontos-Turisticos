@@ -1,19 +1,18 @@
 from coordenada import Coordenada
-from typing import Optional
 
 
 class Ponto:
 
-    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: str,
-                 acessibilidade: Optional['list'], visitas: int, avaliacao: list, geografica=None, sugestoes=None, ):
+    def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: list,
+                 acessibilidade: list, visitas: int, avaliacao: list, geografica=None, sugestoes=None, ):
         self._id_ponto: int = id_ponto
         self._desgignacao: str = desigancao
         self._morada: str = morada
         self._coordenada: Coordenada = Coordenada(latitude, longitude)
-        self._categoria: str = categoria
-        self._acessibilidade: Optional['list'] = acessibilidade
-        self._geografica: Optional['list'] = geografica
-        self._sugestoes: Optional['list'] = sugestoes
+        self._categoria: tuple = tuple(categoria)
+        self._acessibilidade: list = acessibilidade
+        self._geografica: list = geografica
+        self._sugestoes: list = sugestoes
         self._avaliacao: list = avaliacao
         self._visitas: int = visitas
 
@@ -29,7 +28,7 @@ class Ponto:
     def get_acessibilidade(self) -> list | str:
         return self._acessibilidade
 
-    def get_categoria(self) -> str:
+    def get_categoria(self) -> tuple:
         return self._categoria
 
     def set_acessibilidade(self, item: str) -> None:

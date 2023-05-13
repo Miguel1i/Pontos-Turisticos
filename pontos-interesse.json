@@ -5,7 +5,7 @@
     "Morada": "Rua dsfssafs",
     "Latitude": 37.749997,
     "Longitude": -25.4666648,
-    "categoria": "Natureza",
+    "categoria": ["natureza"],
     "acess": [
       "rampas"
     ],
@@ -21,24 +21,5 @@
       2
     ],
     "visitas": 3
-  },
-  "2": {
-    "id": 2,
-    "designacao": "dsada",
-    "Morada": "dsadsa",
-    "Latitude": 3232.0,
-    "Longitude": 222221.0,
-    "categoria": "dfsdfds",
-    "acess": [
-      "fdfsfs"
-    ],
-    "geo": [
-      "ffdsfds"
-    ],
-    "Suges": [
-      "fsfs"
-    ],
-    "avaliacao": [],
-    "visitas": 0
   }
 }
