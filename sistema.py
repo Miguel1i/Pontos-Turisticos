@@ -1,9 +1,9 @@
 from pontointeresse import Ponto
 import json
 from doublenode import LinkedList
-from constantes import ficheiro_json, R
+from constantes import ficheiro_json, R, menu_cat, menu_acess, menu_alterar, ERRO, Opcao
+from funcoes import verifica_access, verifica_categoria
 import math as m
-
 
 class Sistema:
     def __init__(self):
@@ -20,12 +20,12 @@ class Sistema:
         """
         self.pontos_interesse.add(ponto)
 
-    def alterar_ponto(self, _id, categoria, acess) -> None:
+    def alterar_ponto(self, _id: int) -> None:
         """
         Permite alterar as categorias e acessibilidade de um ponto de interesse.
         :return: None.
         """
-        self.pontos_interesse.altera(_id, categoria, acess)
+        self.alterar(_id)
 
     def pesquisar_pontos(self, categoria: str) -> None:
         """
@@ -170,6 +170,68 @@ class Sistema:
         with open(ficheiro_json, "w") as file:
             json.dump(data, file, indent=2)
 
+    def alterar(self, _id: int):
+        while True:
+            print(menu_alterar)
+            op = str(input(Opcao))
+            match op:
+                case '1':
+                    self.alterar_cat(_id)
+                case '2':
+                    self.altera_acessibilidade(_id)
+                case '0':
+                    break
+                case _:
+                    print(ERRO)
+
+    def alterar_cat(self, _id: int) -> None:
+        while True:
+            print(menu_cat)
+            op = str(input("Op > "))
+            ponto = self.pontos_interesse.pesquisa(_id)
+            match op:
+                case '1':
+                    print("Categorias: ", ponto.get_categoria())
+                    categoria = verifica_categoria()
+                    nova_categoria = list(ponto.get_categoria())
+                    if categoria.lower() not in ponto.get_categoria():
+                        nova_categoria.append(categoria)
+                        ponto.set_categoria(tuple(nova_categoria))
+                case '2':
+                    categoria = verifica_categoria()
+                    nova_categoria = list(ponto.get_categoria())
+                    if categoria.lower() in ponto.get_categoria():
+                        nova_categoria.remove(categoria)
+                        ponto.set_categoria(tuple(nova_categoria))
+                    else:
+                        print("\nNão existe essa Categoria que deseja remover\n")
+                case '0':
+                    break
+                case _:
+                    print("\nIntroduza uma opção válida\n")
+
+    def altera_acessibilidade(self, _id: int) -> None:
+        while True:
+            print(menu_acess)
+            op = str(input("Op > "))
+            ponto = self.pontos_interesse.pesquisa(_id)
+            match op:
+                case '1':
+                    print("Acessos: ", ponto.get_acessibilidade())
+                    acess = verifica_access().lower()
+                    if acess not in ponto.get_acessibilidade():
+                        ponto.set_acess(acess)
+                case '2':
+                    acess = verifica_access().lower()
+                    lista = ponto.get_acessibilidade()
+                    if acess in lista:
+                        lista.remove(acess)
+                    else:
+                        print("\nNão existe esse acesso que deseja remover\n")
+                case '0':
+                    break
+                case _:
+                    print("\nIntroduza uma opção válida\n")
 
 def ordena_pesquisa(lista_de_pontos: list) -> list:
     """
@@ -197,7 +259,6 @@ def ordena_sugestoes(lista_de_pontos: list) -> list:
     :param lista_de_pontos: List: lista de objetos Ponto a ser ordenada.
     :return: List: lista de objetos Ponto ordenada pelo número de visitas.
     """
-
     if len(lista_de_pontos) > 1:
 
         pivo = len(lista_de_pontos) // 2
