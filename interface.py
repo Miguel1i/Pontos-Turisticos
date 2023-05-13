@@ -3,7 +3,7 @@ from constantes import menu as m
 from os import system
 from funcoes import verifica_categoria, verifica_latitude, verifica_sugestao, verifica_access, \
     verifica_designacao, verifica_geografica, verifica_morada, verifica_longitude, verifica_avaliacao
-
+import time
 from sistema import Sistema
 
 def menu(sistema: Sistema):
@@ -25,6 +25,8 @@ def menu(sistema: Sistema):
                 ponto: Ponto = Ponto(_id, designacao, morada, latitude, longitude, [categoria], [access], 0, [], [geo],
                                      [sugestao])
                 sistema.adicionar_ponto(ponto)
+                print('\nPonto de interesse adicionado!\n')
+                time.sleep(1)
                 system('cls')
             case '2':
                 system('cls')
@@ -41,6 +43,8 @@ def menu(sistema: Sistema):
                 _id = verifica_id(sistema)
                 avaliacao = verifica_avaliacao()
                 sistema.assinalar_avaliar_ponto(_id, avaliacao)
+                print('\nPonto de interesse avaliado!\n')
+                time.sleep(1)
                 system('cls')
             case '5':
                 system('cls')

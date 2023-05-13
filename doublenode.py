@@ -66,6 +66,11 @@ class LinkedList:
                 self.add(ponto)
 
     def add(self, ponto: Ponto):
+        """
+        Recebe um ponto de interesse e adiciona à linkedlist
+        :param ponto:
+        :return:
+        """
         new_node = DoubleNode(ponto)
         if self._head is None:
             self._head = new_node
@@ -77,6 +82,10 @@ class LinkedList:
             new_node.set_previous(cursor)
 
     def print_lista(self):
+        """
+        Precorre pela linkedlist e dá print a todos os pontos de interesse
+        :return:
+        """
         cursor = self._head
         if cursor is None:
             print('Lista Vazia.')
@@ -86,15 +95,12 @@ class LinkedList:
                 print()
                 cursor = cursor.get_next()
 
-    def altera(self, _id, categoria, acess):
-        cursor = self._head
-        while cursor.get_data().get_id() != _id:
-            cursor = cursor.get_next()
-
-        cursor.get_data().set_categoria(categoria)
-        cursor.get_data().set_acessibilidade(acess)
-
-    def pesquisa(self, _id: int):
+    def pesquisa(self, _id: int) -> Ponto:
+        """
+        Dado um determinado id retorna a data do ponto interesse em questão
+        :param _id:
+        :return:
+        """
         cursor = self._head
         while cursor is not None:
             if cursor.get_data().get_id() == _id:
@@ -104,7 +110,11 @@ class LinkedList:
         if cursor:
             return cursor.get_data()
 
-    def get_last_id(self):
+    def get_last_id(self) -> int:
+        """
+        Vai até ao final da linkedlist e retorna o id do ultimo ponto de interesse
+        :return:
+        """
         cursor = self._head
         if self._head is None:
             return 0
@@ -114,7 +124,16 @@ class LinkedList:
             return cursor.get_data().get_id()
 
     def get_head(self) -> DoubleNode | None:
+        """
+        Retorna a cabeça da linkedlist para ser usada na class sistema
+        :return:
+        """
         return self._head
 
     def set_head(self, valor: None) -> None:
+        """
+        Reseta a cabeça da linkedlist
+        :param valor:
+        :return:
+        """
         self._head = valor

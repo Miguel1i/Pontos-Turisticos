@@ -72,9 +72,13 @@ class Sistema:
         ponto.set_avaliacao(avaliacao)
         ponto.set_visitas()
 
-    def verifica_id(self, _id: int):
+    def verifica_id(self, _id: int) -> bool:
+        """
+        verifica se existe o ID no sistema
+        :param _id:
+        :return : bool.
+        """
         ponto = self.pontos_interesse.pesquisa(_id)
-
         if ponto is not None:
             return True
         else:
@@ -93,12 +97,12 @@ class Sistema:
                 media = sum(cursor.get_data().get_avaliacao()) / len(cursor.get_data().get_avaliacao())
                 print(
                     f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMorada: {ponto.get_morada()}'
-                    f' \nSugestoes: {str(ponto.get_sugestoes())} '
+                    f'\nSugestões: {str(ponto.get_sugestoes())} '
                     f'\nMédia: {media} \nVisitas: {ponto.get_visitas()}\n')
             else:
                 print(
                     f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMorada: {ponto.get_morada()}'
-                    f' \nSugestoes: {str(ponto.get_sugestoes())} '
+                    f' \nSugestões: {str(ponto.get_sugestoes())} '
                     f'\nMédia: {0} \nVisitas: {ponto.get_visitas()}\n')
             cursor = cursor.get_next()
 
@@ -148,6 +152,10 @@ class Sistema:
         return self.pontos_interesse.get_last_id()
 
     def grava(self):
+        """
+        Grava as alterações feitas aos pontos de interesse no ficheiro json
+        :return:
+        """
         cursor = self.pontos_interesse.get_head()
         with open(ficheiro_json, "r") as f:
             data = json.load(f)
@@ -171,6 +179,12 @@ class Sistema:
             json.dump(data, file, indent=2)
 
     def alterar(self, _id: int):
+        """
+        Menu de alterações do ponto de interesse que corresponde ao id em questão
+        É possivel alterar as categorias e os meios de acesso
+        :param _id:
+        :return:
+        """
         while True:
             print(menu_alterar)
             op = str(input(Opcao))
@@ -185,6 +199,11 @@ class Sistema:
                     print(ERRO)
 
     def alterar_cat(self, _id: int) -> None:
+        """
+        Menu de alteração de categorias
+        :param _id:
+        :return:
+        """
         while True:
             print(menu_cat)
             op = str(input("Op > "))
@@ -211,6 +230,11 @@ class Sistema:
                     print("\nIntroduza uma opção válida\n")
 
     def altera_acessibilidade(self, _id: int) -> None:
+        """
+        Menu de alteração de acessos
+        :param _id:
+        :return:
+        """
         while True:
             print(menu_acess)
             op = str(input("Op > "))

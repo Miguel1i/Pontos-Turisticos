@@ -16,72 +16,27 @@
       "Parque estacionamento"
     ],
     "Suges": [
-      "Bife a regional"
-    ],
-    "avaliacao": [
-      4
-    ],
-    "visitas": 4
-  },
-  "4": {
-    "id": 4,
-    "designacao": "Igreja",
-    "Morada": "dsadsa",
-    "Latitude": 4234.0,
-    "Longitude": 432.0,
-    "categoria": [
-      "natureza"
-    ],
-    "acess": [
-      "fdfs"
-    ],
-    "geo": [
-      "fsfds"
-    ],
-    "Suges": [
-      "fsds"
+      "Vista Miradouro"
     ],
     "avaliacao": [],
     "visitas": 0
   },
   "2": {
     "id": 2,
-    "designacao": "dsadsa",
-    "Morada": "dsada",
-    "Latitude": 43242.0,
-    "Longitude": 42342.0,
+    "designacao": "Igreja",
+    "Morada": "dsadsa",
+    "Latitude": 4234.0,
+    "Longitude": 432.0,
     "categoria": [
-      "fdfs"
-    ],
-    "acess": [
-      "fdsfds"
-    ],
-    "geo": [
-      "fsdfds"
-    ],
-    "Suges": [
-      "fdsfs"
-    ],
-    "avaliacao": [],
-    "visitas": 0
-  },
-  "3": {
-    "id": 3,
-    "designacao": "dsdas",
-    "Morada": "~dsadsa",
-    "Latitude": 4343.0,
-    "Longitude": 2342.0,
-    "categoria": [
+      "natureza",
       "gastronomia"
     ],
-    "acess": [
-      "dsada"
-    ],
+    "acess": [],
     "geo": [
-      "dasdsa"
+      "fsfds"
     ],
     "Suges": [
-      "dsadsa"
+      "fsds"
     ],
     "avaliacao": [],
     "visitas": 0
