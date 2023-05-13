@@ -17,8 +17,6 @@ funcoes.py,c\7\c7fcbfc92dfb4ca49d738cd1752fc7cb947690b6
 main.py,f\1\f1bdda93d9a278e358509d498e17d97764c1fb29
 A
 pontointeresse.py,4\d\4d6ce688a7ea9134bba9716ba4dc63d4e58483fd
-E
-pontos-interesse.json,8\1\8126c49c0603b37c907a346cb85eeeca1351b278
 :
 
 sistema.py,5\8\58f0f077e7838cecb4d50f96ceeef50d01d2be00

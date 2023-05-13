@@ -2,11 +2,10 @@
   "1": {
     "id": 1,
     "designacao": "Miradouro Lagoa do Fogo",
-    "Morada": "Rua dsfssafs",
+    "Morada": "EN5-2A, Ribeira Grande",
     "Latitude": 37.749997,
     "Longitude": -25.4666648,
     "categoria": [
-      "restauracao",
       "natureza"
     ],
     "acess": [
@@ -16,27 +15,30 @@
       "Parque estacionamento"
     ],
     "Suges": [
-      "Vista Miradouro"
+      "Observacao de passaros"
     ],
-    "avaliacao": [],
-    "visitas": 0
+    "avaliacao": [
+      4
+    ],
+    "visitas": 4
   },
   "2": {
-    "id": 2,
-    "designacao": "Igreja",
-    "Morada": "dsadsa",
-    "Latitude": 4234.0,
-    "Longitude": 432.0,
+    "id": 4,
+    "designacao": "Restaurante Jose do Rego",
+    "Morada": "Rua Nossa Senhora das Necessidades 30, Atalhada, 9560-418 Lagoa",
+    "Latitude": 37.746911371395626,
+    "Longitude": -25.590122070929162,
     "categoria": [
-      "natureza",
       "gastronomia"
     ],
-    "acess": [],
+    "acess": [
+      "estrada"
+    ],
     "geo": [
-      "fsfds"
+      "Parque de estacionamento"
     ],
     "Suges": [
-      "fsds"
+      "Bife a regional"
     ],
     "avaliacao": [],
     "visitas": 0
