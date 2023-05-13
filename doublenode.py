@@ -1,8 +1,7 @@
 import json
 from pontointeresse import Ponto
 from typing import Optional
-import math as m
-from constantes import R, ficheiro_json
+from constantes import ficheiro_json
 
 
 class DoubleNode:
@@ -103,7 +102,6 @@ class LinkedList:
 
         if cursor:
             return cursor.get_data()
-
 
     def get_last_id(self):
         cursor = self._head

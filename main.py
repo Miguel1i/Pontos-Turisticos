@@ -1,5 +1,6 @@
 from sistema import Sistema
 from interface import menu
+from os import system
 
 
 def main() -> None:
@@ -9,9 +10,9 @@ def main() -> None:
     :return: None
     """
     sistema = Sistema()
+    system('cls')
     menu(sistema)
 
 
 if __name__ == '__main__':
     main()
-

@@ -2,6 +2,7 @@ from pontointeresse import Ponto
 from sistema import Sistema
 from constantes import menu as m, menu_cat, menu_alterar, menu_acess, Opcao, ERRO
 from os import system
+import time
 
 
 def menu(sistema: Sistema):
@@ -23,6 +24,8 @@ def menu(sistema: Sistema):
                 ponto: Ponto = Ponto(_id, designacao, morada, latitude, longitude, [categoria], [access], 0, [], [geo],
                                      [sugestao])
                 sistema.adicionar_ponto(ponto)
+                print('\nPonto de interesse adicionado!\n')
+                time.sleep(1)
                 system('cls')
             case '2':
                 system('cls')
@@ -39,6 +42,8 @@ def menu(sistema: Sistema):
                 _id = verifica_id(sistema)
                 avaliacao = verifica_avaliacao()
                 sistema.assinalar_avaliar_ponto(_id, avaliacao)
+                print('\nPonto de interesse avaliado!\n')
+                time.sleep(1)
                 system('cls')
             case '5':
                 system('cls')
@@ -62,8 +67,8 @@ def verifica_designacao() -> str:
     :return: Designacao: str
     """
     while True:
-        designacao = str(input("Designacao > "))
-        if designacao == '':
+        designacao = str(input("\nDesignacão > "))
+        if not designacao:
             print('\nIntroduza uma designacão válida.\n')
         else:
             break
@@ -92,7 +97,7 @@ def verifica_avaliacao() -> int:
     """
     while True:
         try:
-            avaliacao = int(input('Avaliação [1-4] > '))
+            avaliacao = int(input('\nAvaliação [1-4] > '))
             if avaliacao > 4 or avaliacao < 1:
                 print('\nIntroduza um valor entre 1 e 4.\n')
             else:
@@ -138,9 +143,10 @@ def verifica_access() -> str:
     Pede ao utilizador para introduzir um acesso e só termina quando esta for válida.
     :return: Acesso: str
     """
+
     while True:
         access = str(input('Acesso > '))
-        if access == '':
+        if not access:
             print('\nIntroduza um acesso válido.\n')
         else:
             break
@@ -177,6 +183,7 @@ def verifica_sugestao() -> str:
 
     return sugestao.strip()
 
+
 def verifica_geografica() -> str:
     """
     Pede ao utilizador para introduzir uma geografica e só termina quando esta for válida.
@@ -190,6 +197,7 @@ def verifica_geografica() -> str:
             break
     return geo.strip()
 
+
 def verifica_id(_sistema: Sistema):
     while True:
         try:
@@ -201,66 +209,93 @@ def verifica_id(_sistema: Sistema):
         except ValueError:
             print('\nIntroduza um número válido.\n')
 
-def alterar(_sistema:  Sistema, _id):
+
+def alterar(_sistema: Sistema, _id):
+    system('cls')
     while True:
         print(menu_alterar)
         op = str(input(Opcao))
         match op:
             case '1':
                 alterar_cat(_sistema, _id)
+                system('cls')
+
             case '2':
                 altera_acessibilidade(_sistema, _id)
+                system('cls')
             case '0':
+                system('cls')
                 break
             case _:
                 print(ERRO)
 
 
 def alterar_cat(_sistema: Sistema, _id: int) -> None:
+    system('cls')
     while True:
+        system('cls')
         print(menu_cat)
-        op = str(input("Op > "))
+        op = str(input("\nOP > "))
         ponto = _sistema.pontos_interesse.pesquisa(_id)
         match op:
             case '1':
-                print("Categorias: ", ponto.get_categoria())
+                print("\nCategorias: ", ponto.get_categoria())
                 categoria = verifica_categoria()
                 nova_categoria = list(ponto.get_categoria())
                 if categoria.lower() not in ponto.get_categoria():
                     nova_categoria.append(categoria)
                     ponto.set_categoria(tuple(nova_categoria))
+                print('\nCategoria adicionada!\n')
+                time.sleep(1)
+                system('cls')
             case '2':
+                print("\nCategorias: ", ponto.get_categoria())
                 categoria = verifica_categoria()
                 nova_categoria = list(ponto.get_categoria())
                 if categoria.lower() in ponto.get_categoria():
                     nova_categoria.remove(categoria)
                     ponto.set_categoria(tuple(nova_categoria))
+                    print('\nCategoria removida!\n')
+                    time.sleep(1)
                 else:
                     print("\nNão existe essa Categoria que deseja remover\n")
             case '0':
+                system('cls')
                 break
             case _:
+                system('cls')
                 print("\nIntroduza uma opção válida\n")
 
+
 def altera_acessibilidade(_sistema: Sistema, _id: int) -> None:
+    system('cls')
     while True:
+        system('cls')
         print(menu_acess)
-        op = str(input("Op > "))
+        op = str(input("\nOP > "))
         ponto = _sistema.pontos_interesse.pesquisa(_id)
         match op:
             case '1':
-                print("Acessos: ", ponto.get_acessibilidade())
+                print("\nAcessos: ", ponto.get_acessibilidade())
                 acess = verifica_access().lower()
                 if acess not in ponto.get_acessibilidade():
                     ponto.set_acess(acess)
+                print('\nAcesso adicionado!\n')
+                time.sleep(1)
+                system('cls')
             case '2':
+                print("\nAcessos: ", ponto.get_acessibilidade())
                 acess = verifica_access().lower()
                 lista = ponto.get_acessibilidade()
                 if acess in lista:
                     lista.remove(acess)
+                    print('\nAcesso removido!\n')
+                    time.sleep(1)
                 else:
                     print("\nNão existe esse acesso que deseja remover\n")
             case '0':
+                system('cls')
                 break
             case _:
+                system('cls')
                 print("\nIntroduza uma opção válida\n")

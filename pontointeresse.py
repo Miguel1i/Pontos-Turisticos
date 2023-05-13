@@ -1,8 +1,8 @@
 from coordenada import Coordenada
 from typing import Optional
 
-class Ponto:
 
+class Ponto:
 
     def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: list,
                  acessibilidade: Optional['list'], visitas=0, avaliacao=None, geografica=None, sugestoes=None, ):
@@ -16,7 +16,6 @@ class Ponto:
         self._sugestoes: list = sugestoes
         self._avaliacao: list = avaliacao
         self._visitas: int = visitas
-
 
     def get_id(self) -> int:
         return self._id_ponto

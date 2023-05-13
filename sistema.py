@@ -93,12 +93,12 @@ class Sistema:
                 media = sum(cursor.get_data().get_avaliacao()) / len(cursor.get_data().get_avaliacao())
                 print(
                     f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMorada: {ponto.get_morada()}'
-                    f' \nSugestoes: {str(ponto.get_sugestoes())} '
+                    f'\nSugestões: {str(ponto.get_sugestoes())} '
                     f'\nMédia: {media} \nVisitas: {ponto.get_visitas()}\n')
             else:
                 print(
                     f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMorada: {ponto.get_morada()}'
-                    f' \nSugestoes: {str(ponto.get_sugestoes())} '
+                    f' \nSugestões: {str(ponto.get_sugestoes())} '
                     f'\nMédia: {0} \nVisitas: {ponto.get_visitas()}\n')
             cursor = cursor.get_next()
 
