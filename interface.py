@@ -1,5 +1,5 @@
 from pontointeresse import Ponto
-from constantes import menu as m
+from constantes import MENU
 from os import system
 from funcoes import verifica_categoria, verifica_latitude, verifica_sugestao, verifica_access, \
     verifica_designacao, verifica_geografica, verifica_morada, verifica_longitude, verifica_avaliacao
@@ -8,7 +8,7 @@ from sistema import Sistema
 
 def menu(sistema: Sistema):
     while True:
-        print(m)
+        print(MENU)
         ans = str(input('Escolha a opção >> '))
         match ans:
             case '1':

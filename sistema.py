@@ -1,7 +1,7 @@
 from pontointeresse import Ponto
 import json
 from doublenode import LinkedList
-from constantes import ficheiro_json, R, menu_cat, menu_acess, menu_alterar, ERRO, Opcao
+from constantes import FICHEIRO_JSON, R, MENU_CAT, MENU_ACESS, MENU_ALT, ERRO, OPCAO
 from funcoes import verifica_access, verifica_categoria
 import math as m
 
@@ -157,7 +157,7 @@ class Sistema:
         :return:
         """
         cursor = self.pontos_interesse.get_head()
-        with open(ficheiro_json, "r") as f:
+        with open(FICHEIRO_JSON, "r") as f:
             data = json.load(f)
             while cursor is not None:
                 data.update({str(cursor.get_data().get_id()): {"id": int(cursor.get_data().get_id()),
@@ -175,7 +175,7 @@ class Sistema:
                                                                "visitas": cursor.get_data().get_visitas()}})
                 cursor = cursor.get_next()
 
-        with open(ficheiro_json, "w") as file:
+        with open(FICHEIRO_JSON, "w") as file:
             json.dump(data, file, indent=2)
 
     def alterar(self, _id: int):
@@ -186,8 +186,8 @@ class Sistema:
         :return:
         """
         while True:
-            print(menu_alterar)
-            op = str(input(Opcao))
+            print(MENU_ALT)
+            op = str(input(OPCAO))
             match op:
                 case '1':
                     self.alterar_cat(_id)
@@ -205,8 +205,8 @@ class Sistema:
         :return:
         """
         while True:
-            print(menu_cat)
-            op = str(input("Op > "))
+            print(MENU_CAT)
+            op = str(input(OPCAO))
             ponto = self.pontos_interesse.pesquisa(_id)
             match op:
                 case '1':
@@ -236,8 +236,8 @@ class Sistema:
         :return:
         """
         while True:
-            print(menu_acess)
-            op = str(input("Op > "))
+            print(MENU_ACESS)
+            op = str(input(OPCAO))
             ponto = self.pontos_interesse.pesquisa(_id)
             match op:
                 case '1':

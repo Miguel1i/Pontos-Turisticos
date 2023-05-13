@@ -1,7 +1,7 @@
 import json
 from pontointeresse import Ponto
 from typing import Optional
-from constantes import ficheiro_json
+from constantes import FICHEIRO_JSON
 
 
 class DoubleNode:
@@ -56,7 +56,7 @@ class LinkedList:
 
     def __init__(self):
         self._head = None
-        with open(ficheiro_json, "r") as f:
+        with open(FICHEIRO_JSON, "r") as f:
             data = json.load(f)
             for p in data:
                 ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
