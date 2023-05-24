@@ -40,5 +40,26 @@
     ],
     "avaliacao": [],
     "visitas": 0
+  },
+  "3": {
+    "id": 3,
+    "designacao": "dsds",
+    "Morada": "dsds",
+    "Latitude": 434.0,
+    "Longitude": 343.0,
+    "categoria": [
+      "dfdf"
+    ],
+    "acess": [
+      "fdsfsd"
+    ],
+    "geo": [
+      "fdsfds"
+    ],
+    "Suges": [
+      "fdsf"
+    ],
+    "avaliacao": [],
+    "visitas": 0
   }
 }
