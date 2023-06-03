@@ -70,6 +70,6 @@ class QueueInterface:
     def pop(self):
         """
         Removes the item at top of the queue, assuming the queue is not empty.
-        :return the item removed
+        :return: the item removed
         """
         self.items.pop(0)

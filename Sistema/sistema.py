@@ -1,7 +1,10 @@
 import json
-from pontos.pontointeresse import Ponto
+from Pontos.pontointeresse import Ponto
+from ViaCirculação.ViaCirculacao import ViaCirculacao
+from Estruturas.Grafos.grafo import Grafo
 from Estruturas.DoubleNode.doublenode import LinkedList
-from constantes.constantes import FICHEIRO_JSON, R, MENU_CAT, MENU_ACESS, MENU_ALT, ERRO, OPCAO
+from constantes.constantes import FICHEIRO_JSON, R, MENU_CAT, MENU_ACESS, MENU_ALT, ERRO, OPCAO, MENU_ARESTAS, \
+    MENU_REDE, MENU_VERTICE
 from Funções.funcoes import verifica_strings
 import math as m
 
@@ -14,7 +17,9 @@ class Sistema:
         """
         self.pontos_interesse = LinkedList()
         self._categorias = ('natureza', 'gastronomia', 'lazer', 'cultura')
+        self.rede_circulacao = Grafo()
 
+    # Pontos
     def adicionar_ponto(self, ponto: Ponto) -> None:
         """
         Permite adicionar um novo ponto de interesse.
@@ -258,6 +263,64 @@ class Sistema:
                     break
                 case _:
                     print("\nIntroduza uma opção válida\n")
+
+    # Rede Circulacao
+    def consultar_rede_circulacao(self) -> None:
+        self.rede_circulacao.draw_graph()
+
+    def interromper_via_circulacao(self, from_label: str, to_label: str) -> list[list]:
+
+        self.rede_circulacao.remover_aresta(from_label, to_label)
+
+        return self.rede_circulacao.caminhos_possiveis(from_label, to_label)
+
+    def obter_itinerario(self, from_label: str, to_label: str):
+
+        print(self.rede_circulacao.calcula_caminho(from_label, to_label))
+
+    def gerir_rede_circulacao(self):
+        while True:
+            print(MENU_REDE)
+            op = str(input(OPCAO))
+            match op:
+                case '1':
+                    self.gerir_arestas()
+                case '2':
+                    self.gerir_vertices()
+                case '0':
+                    break
+
+    def gerir_arestas(self):
+        while True:
+            print(MENU_ARESTAS)
+            op = str(input(OPCAO))
+            match op:
+                case '1':
+                    self.listar_pontos()
+                    via = ViaCirculacao()
+                    self.rede_circulacao.adicionar_aresta(from_label, to_label)
+                case '2':
+                    self.rede_circulacao.get_edges()
+                case '3':
+                    print(str(self.rede_circulacao))
+                    self.rede_circulacao.remover_aresta(from_label, to_label)
+                case '0':
+                    break
+
+    def gerir_vertices(self):
+        while True:
+            print(MENU_VERTICE)
+            op = str(input(OPCAO))
+            match op:
+                case '1':
+                    self.rede_circulacao.adicionar_vertice(label)
+                case '2':
+                    self.rede_circulacao.get_vertices()
+                case '3':
+                    print(str(self.rede_circulacao))
+                    self.rede_circulacao.remover_vertice(label)
+                case '0':
+                    break
 
     def ordena_pesquisa(self, lista_de_pontos: list) -> list:
         """

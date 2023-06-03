@@ -45,3 +45,30 @@ MENU_ACESS = """────────── Acessibilidade ──────
 0: Voltar
 
 ──────────      END       ──────────"""
+
+
+MENU_REDE = """────────── REDE ──────────
+
+1: Gerir Arestas
+2: Gerir Vertices
+0: Voltar
+
+──────────      END       ──────────"""
+
+MENU_ARESTAS = """────────── ARESTAS ──────────
+
+1: Adicionar Aresta
+2: Consultar Aresta
+3: Remover Aresta
+0: Voltar
+
+──────────      END       ──────────"""
+
+MENU_VERTICE = """────────── VERTICES ──────────
+
+1: Adicionar Vertice
+2: Consultar Vertice
+3: Remover Vertice
+0: Voltar
+
+──────────      END       ──────────"""

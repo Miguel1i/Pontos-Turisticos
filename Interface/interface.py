@@ -1,4 +1,4 @@
-from pontos.pontointeresse import Ponto
+from Pontos.pontointeresse import Ponto
 from constantes.constantes import MENU
 from os import system
 from Funções.funcoes import verifica_strings, verifica_avaliacao, verifica_floats
@@ -55,15 +55,21 @@ def menu(sistema: Sistema):
                 longitude = verifica_floats("Longitude > ")
                 sistema.obter_sugestoes(latitude, longitude)
             case '7':
-                pass
+                sistema.gerir_rede_circulacao()
             case '8':
-                pass
+                sistema.consultar_rede_circulacao()
             case '9':
                 pass
             case '10':
-                pass
+                sistema.listar_pontos()
+                from_label = str(input("Introduza a Designação do Ponto Inicial > "))
+                to_label = str(input("Introduza a Designação do Ponto Final > "))
+                sistema.interromper_via_circulacao(from_label, to_label)
             case '11':
-                pass
+                sistema.listar_pontos()
+                from_label = str(input("Introduza a Designação do Ponto Inicial > "))
+                to_label = str(input("Introduza a Designação do Ponto Final > "))
+                sistema.obter_itinerario(from_label, to_label)
             case '12':
                 pass
             case '0':
