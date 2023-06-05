@@ -46,3 +46,16 @@ def verifica_floats(txt: str) -> float:
     return op
 
 
+def verifica_ints(txt: str) -> int:
+    """
+    Pede ao utilizador para introduzir um valor e só termina quando este for válido.
+    :return: int
+    """
+    while True:
+        try:
+            op = int(input(txt))
+            break
+        except ValueError:
+            print('\nIntroduza um valor válido.\n')
+
+    return op

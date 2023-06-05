@@ -1,11 +1,11 @@
 import json
-from pontos.pontointeresse import Ponto
-from ViaCirculacao.ViaCirculacao import ViaCirculacao
+from Pontos.pontointeresse import Ponto
+from ViaCirculação.ViaCirculacao import ViaCirculacao
 from Estruturas.Grafos.grafo import Grafo
 from Estruturas.DoubleNode.doublenode import LinkedList
 from constantes.constantes import FICHEIRO_JSON, R, MENU_CAT, MENU_ACESS, MENU_ALT, ERRO, OPCAO, MENU_ARESTAS, \
     MENU_REDE, MENU_VERTICE, FICHEIRO_REDE
-from Funções.funcoes import verifica_strings, verifica_floats
+from Funções.funcoes import verifica_strings, verifica_floats, verifica_ints
 import math as m
 
 
@@ -302,17 +302,17 @@ class Sistema:
 
         return ponto
 
-    def interromper_via_circulacao(self, from_label: str, to_label: str, Origem: str, Destino: str) -> None:
+    def interromper_via_circulacao(self, from_label: str, to_label: str, origem: str, destino: str) -> None:
         """
         Interrompe uma via na rede e tenta encontrar um caminho sem passar pela a aresta eliminada
         :param from_label:
         :param to_label:
-        :param Origem:
-        :param Destino:
+        :param origem:
+        :param destino:
         :return:
         """
         self.rede_circulacao.remover_aresta(from_label, to_label)
-        print(self.rede_circulacao.caminhos_possiveis(Origem, Destino))
+        print(self.rede_circulacao.caminhos_possiveis(origem, destino))
 
         return None
 
@@ -354,8 +354,8 @@ class Sistema:
                     self.listar_pontos()
                     from_label = verifica_strings("Vertice Principal")
                     to_label = verifica_strings("Vertice Adjacente")
-                    velocidade_min = verifica_floats("Velocidade minima da via")
-                    velocidade_max = verifica_floats("Velocidade max da via")
+                    velocidade_min = verifica_ints("Velocidade minima da via")
+                    velocidade_max = verifica_ints("Velocidade max da via")
                     distancia = verifica_floats("Distancia da via")
                     via = ViaCirculacao(distancia, velocidade_min, velocidade_max)
                     self.rede_circulacao.adicionar_aresta(from_label, to_label, via)
@@ -394,7 +394,7 @@ class Sistema:
         return None
 
     def consultar_pontos_criticos(self):
-        print(self.rede_circulacao.ponto_maios_saidas())
+        print(self.rede_circulacao.ponto_mais_saidas())
         print(self.rede_circulacao.ponto_mais_entradas())
 
     def startup(self) -> None:
@@ -434,13 +434,13 @@ class Sistema:
                 self.rede_circulacao.adicionar_aresta(data[p]["Origem"], data[p]["Destino"], via)
         return None
 
-    def consultar_rotas(self, Origem: str):
+    def consultar_rotas(self, origem: str):
         """
         Mostra as rotas disponiveis entre 2 pontos da Rede
-        :param Origem:
+        :param origem:
         :return:
         """
-        print(self.rede_circulacao.arvore(Origem))
+        print(self.rede_circulacao.arvore(origem))
 
     def ordena_pesquisa(self, lista_de_pontos: list) -> list:
         """

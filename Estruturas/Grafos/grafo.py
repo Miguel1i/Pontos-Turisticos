@@ -1,22 +1,43 @@
 import networkx
 from matplotlib import pyplot as p
-from ViaCirculacao.ViaCirculacao import ViaCirculacao
+from ViaCirculação.ViaCirculacao import ViaCirculacao
 from Estruturas.Queue.queueinterface import Queue
 
 
 class Grafo:
 
     def __init__(self):
+        """
+        Inicializa a classe Grafo.
+        """
         self._vertices: dict[str, list[list[str, ViaCirculacao]]] = {}
 
     def adicionar_vertice(self, label: str) -> str:
+        """
+        Adiciona um vértice ao grafo.
+
+        Args:
+            label (str): O rótulo do vértice a ser adicionado.
+
+        Returns:
+            str: Uma mensagem informando se o vértice foi adicionado com sucesso ou se ele já existe.
+        """
         if label not in self._vertices:
             self._vertices[label] = []
             return 'Vertice Adicionado'
         else:
             return 'O Ponto já se encontra na rede'
 
-    def remover_vertice(self, label: str) -> str | None:
+    def remover_vertice(self, label: str) -> str:
+        """
+        Remove um vértice do grafo.
+
+        Args:
+            label (str): O rótulo do vértice a ser removido.
+
+        Returns:
+            str : Uma mensagem informando se o vértice foi removido com sucesso ou se ele não pertence à rede.
+        """
         if label in self._vertices:
             for vertice in self._vertices:
                 self.remover_aresta(vertice, label)
@@ -26,6 +47,17 @@ class Grafo:
             return 'Vértice não percente à rede!'
 
     def adicionar_aresta(self, from_label: str, to_label: str, via: ViaCirculacao) -> str:
+        """
+        Adiciona uma aresta ao grafo.
+
+        Args:
+            from_label (str): O rótulo do vértice de origem.
+            to_label (str): O rótulo do vértice de destino.
+            via (ViaCirculacao): O objeto ViaCirculacao que representa a aresta.
+
+        Returns:
+            str: Uma mensagem informando se a aresta foi adicionada com sucesso ou se ela já existe.
+        """
         if from_label in self._vertices and to_label in self._vertices:
             if to_label not in self._vertices[from_label]:
                 self._vertices[from_label].append([to_label, via])
@@ -34,6 +66,16 @@ class Grafo:
                 return 'Aresta já existe'
 
     def remover_aresta(self, from_label, to_label) -> str:
+        """
+       Remove uma aresta do grafo.
+
+       Args:
+           from_label (str): O rótulo do vértice de origem.
+           to_label (str): O rótulo do vértice de destino.
+
+       Returns:
+           str: Uma mensagem informando se a aresta foi removida com sucesso ou se ela é inválida.
+       """
         if (from_label, to_label) in self.get_edges():
             for aresta in self._vertices[from_label]:
                 if to_label in aresta:
@@ -43,6 +85,15 @@ class Grafo:
             return 'Aresta inválida!'
 
     def adjacents(self, label: str):
+        """
+        Retorna os vértices adjacentes ao vértice dado.
+
+        Args:
+            label (str): O rótulo do vértice.
+
+        Returns:
+            list: Uma lista com os rótulos dos vértices adjacentes.
+        """
         if label in self._vertices:
             adjacentes = []
             for aresta in self._vertices[label]:
@@ -50,38 +101,34 @@ class Grafo:
 
             return adjacentes
 
-    def adjacents_vias(self, label: str):
-        if label in self._vertices:
-            adjacentes = []
-            for aresta in self._vertices[label]:
-                adjacentes.append((aresta[0], aresta[1]))
-
-            return adjacentes
-
     def __str__(self):
         """
+        Retorna uma representação em string do grafo.
 
-        :return:
+        Returns:
+            str: A representação em string do grafo.
         """
         s = ''
         for v in self._vertices:
             s += f'{v} -> {self._vertices[v]}\n'
         return s
 
-    def __len__(self):
-        """
-        :return:
-        """
-        return len(self._vertices)
-
     def get_vertices(self) -> set[str]:
         """
-        :return:
+        Retorna um conjunto com os rótulos de todos os vértices do grafo.
+
+        Returns:
+            set[str]: O conjunto de rótulos dos vértices.
         """
         return set(self._vertices.keys())
 
     def get_edges(self) -> set[tuple[str, list[str, ViaCirculacao]]]:
+        """
+        Retorna um conjunto com as arestas do grafo.
 
+        Returns:
+            set[tuple[str, list[str, ViaCirculacao]]]: O conjunto de arestas do grafo.
+        """
         edges: set[tuple[str, list[str, ViaCirculacao]]] = set()
         for v in self._vertices:
             for adj, i in self._vertices[v]:
@@ -90,46 +137,66 @@ class Grafo:
 
         return edges
 
-    def get_size_edges(self):
-        return len(self.get_edges())
-
-    def get_size_vertices(self):
-        return len(self.get_vertices())
-
-    def draw_graph(self):
+    def draw_graph(self) -> None:
         """
-        Draws the graph
-        :return:
+        Desenha o grafo.
         """
         g = networkx.DiGraph()  # g é do tipo de Networkx
         g.add_nodes_from(self.get_vertices())
         g.add_edges_from(self.get_edges())
-        networkx.draw(g, with_labels=True, arrows=True)
+        pos = networkx.shell_layout(g)
+        networkx.draw(g, pos=pos, with_labels=True, arrows=True)
         p.show()
 
-    def get_distancia_vertices(self, from_label, to_label):
+    def get_distancia_vertices(self, from_label: str, to_label: str) -> float:
+        """
+        Retorna a distância entre dois vértices do grafo.
+
+        Args:
+            from_label (str): O rótulo do vértice de origem.
+            to_label (str): O rótulo do vértice de destino.
+
+        Returns:
+            float: A distância entre os vértices.
+        """
         for aresta in self._vertices[from_label]:
             if to_label == aresta[0]:
-                return aresta[1].get_distancia()
+                via = aresta[1]
+                return via.get_distancia()
 
-    def get_velocidade_media(self, from_label, to_label):
+    def get_velocidade_media(self, from_label: str, to_label: str) -> float:
+        """
+        Retorna a velocidade média de circulação entre dois vértices do grafo.
+
+        Args:
+            from_label (str): O rótulo do vértice de origem.
+            to_label (str): O rótulo do vértice de destino.
+
+        Returns:
+            float: A velocidade média de circulação entre os vértices.
+        """
         for aresta in self._vertices[from_label]:
             if to_label == aresta[0]:
-                return aresta[1].get_velocidade_media_circulacao()
+                via = aresta[1]
+                return via.get_velocidade_media_circulacao()
 
-    def caminhos_possiveis(self, from_label, to_label):
+    def caminhos_possiveis(self, from_label: str, to_label: str) -> list[list[str]]:
         """
-        Retorna todos os caminhos possiveis entre 2 pontos da rede
-        :param from_label:
-        :param to_label:
-        :return caminhos:
+        Retorna todos os caminhos possíveis entre dois pontos da rede.
+
+        Args:
+            from_label (str): O rótulo do vértice de origem.
+            to_label (str): O rótulo do vértice de destino.
+
+        Returns:
+            list: Uma lista contendo todos os caminhos possíveis entre os pontos da rede.
         """
 
-        fila = [[from_label]]
+        fila = Queue([[from_label]])
         caminhos = []
         if from_label in self._vertices and to_label in self._vertices:
             while fila:
-                caminho_atual = fila.pop(0)
+                caminho_atual = fila.remove()
                 vertice_atual = caminho_atual[-1]
 
                 if vertice_atual == to_label:
@@ -137,17 +204,20 @@ class Grafo:
 
                 for lista in self._vertices[vertice_atual]:
                     if lista[0] not in caminho_atual:
-                        fila.append(caminho_atual + [lista[0]])
+                        fila.add(caminho_atual + [lista[0]])
 
-            return caminhos
+        return caminhos
 
-    def calcula_caminho(self, from_label, to_label) -> dict | str:
-
+    def calcula_caminho(self, from_label: str, to_label: str) -> dict | str:
         """
-        Retorna o caminho mais curto entre 2 pontos da rede -> CAminho / Distancia(custo) / tempo a pé / tempo de carro
-        :param from_label:
-        :param to_label:
-        :return:
+        Retorna o caminho mais curto entre dois pontos da rede.
+
+        Args:
+            from_label (str): O rótulo do vértice de origem.
+            to_label (str): O rótulo do vértice de destino.
+
+        Returns:
+            dict | str: Um dicionário contendo informações sobre o caminho mais curto ou uma mensagem de erro.
         """
 
         caminhos_possiveis = self.caminhos_possiveis(from_label, to_label)
@@ -175,10 +245,12 @@ class Grafo:
                                              2)
         }
 
-    def ponto_maios_saidas(self) -> str:
+    def ponto_mais_saidas(self) -> str:
         """
-        Retorna o/os pontos que contem mais saidas
-        :return:
+        Retorna o(s) ponto(s) que contém mais saídas.
+
+        Returns:
+            str: O(s) ponto(s) que contém mais saídas.
         """
         maior = {}
         for vertice in self._vertices:
@@ -190,8 +262,10 @@ class Grafo:
 
     def ponto_mais_entradas(self) -> str:
         """
-        Retorna o/os pontos que contem mais entradas
-        :return:
+        Retorna o(s) ponto(s) que contém mais entradas.
+
+        Returns:
+            str: O(s) ponto(s) que contém mais entradas.
         """
         maior = {}
         count = 0
@@ -206,11 +280,13 @@ class Grafo:
             count = 0
         return f'{maior[max(maior)]}, {max(maior)}'
 
-
-
-
-
     def arvore(self, from_label: str) -> None:
+        """
+        Desenha uma árvore a partir de um vértice inicial.
+
+        Args:
+            from_label (str): O rótulo do vértice inicial.
+        """
 
         travessia = self.travessia_largura(from_label)
         g = networkx.DiGraph()
@@ -269,9 +345,3 @@ class Grafo:
                             fila.add(vizinho)
 
         return visitados
-
-    def is_empty(self) -> bool:
-        return len(self._vertices) == 0
-
-    def clear(self) -> None:
-        self._vertices = {}
