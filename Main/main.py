@@ -10,6 +10,7 @@ def main() -> None:
     :return: None
     """
     sistema = Sistema()
+    sistema.startup()
     system('cls')
     menu(sistema)
 

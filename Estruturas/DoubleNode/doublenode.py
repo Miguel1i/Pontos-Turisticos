@@ -56,14 +56,7 @@ class LinkedList:
 
     def __init__(self):
         self._head = None
-        with open(FICHEIRO_JSON, "r") as f:
-            data = json.load(f)
-            for p in data:
-                ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
-                              data[p]["Longitude"], data[p]["categoria"], data[p]["acess"], data[p]["visitas"],
-                              data[p]["avaliacao"], data[p]["geo"],
-                              data[p]["Suges"])
-                self.add(ponto)
+
 
     def add(self, ponto: Ponto):
         """
@@ -95,6 +88,14 @@ class LinkedList:
                 print()
                 cursor = cursor.get_next()
 
+    def get_designacoes(self):
+        design = []
+        cursor = self._head
+        while cursor is not None:
+            design.append(cursor.get_data().get_designacao())
+            cursor = cursor.get_next()
+        return design
+
     def pesquisa(self, _id: int) -> Ponto:
         """
         Dado um determinado id retorna a data do ponto interesse em questão
@@ -109,6 +110,22 @@ class LinkedList:
 
         if cursor:
             return cursor.get_data()
+
+    def pesquisa_designacao(self, design: str) -> bool:
+        """
+
+        :param design:
+        :return:
+        """
+        cursor = self._head
+        while cursor is not None:
+            if cursor.get_data().get_designacao() == design:
+                break
+
+            cursor = cursor.get_next()
+
+        if cursor:
+            return True
 
     def get_last_id(self) -> int:
         """

@@ -1,11 +1,11 @@
 import json
-from Pontos.pontointeresse import Ponto
-from ViaCirculação.ViaCirculacao import ViaCirculacao
+from pontos.pontointeresse import Ponto
+from ViaCirculacao.ViaCirculacao import ViaCirculacao
 from Estruturas.Grafos.grafo import Grafo
 from Estruturas.DoubleNode.doublenode import LinkedList
 from constantes.constantes import FICHEIRO_JSON, R, MENU_CAT, MENU_ACESS, MENU_ALT, ERRO, OPCAO, MENU_ARESTAS, \
-    MENU_REDE, MENU_VERTICE
-from Funções.funcoes import verifica_strings
+    MENU_REDE, MENU_VERTICE, FICHEIRO_REDE
+from Funções.funcoes import verifica_strings, verifica_floats
 import math as m
 
 
@@ -158,6 +158,18 @@ class Sistema:
         """
         return self.pontos_interesse.get_last_id()
 
+    def verifica_ponto(self, txt: str):
+        while True:
+            try:
+                ponto = str(input(txt))
+                if not self.pontos_interesse.pesquisa_designacao(ponto):
+                    print("Introduza um Ponto válido")
+                else:
+                    break
+            except ValueError:
+                print('\nIntroduza uma latitude válida.\n')
+        return ponto
+
     def grava(self):
         """
         Grava as alterações feitas aos pontos de interesse no ficheiro json
@@ -266,19 +278,58 @@ class Sistema:
 
     # Rede Circulacao
     def consultar_rede_circulacao(self) -> None:
+        """
+        
+        :return:
+        """
         self.rede_circulacao.draw_graph()
 
-    def interromper_via_circulacao(self, from_label: str, to_label: str) -> list[list]:
+    def verifica_vertices(self, txt: str) -> str:
+        """
+        Função de input que vertifica se o ponto introduzido se encontra na Rede
+        :param txt:
+        :return:
+        """
+        while True:
+            try:
+                ponto = str(input(txt))
+                if ponto not in self.rede_circulacao.get_vertices():
+                    print("Introduza um Ponto válido")
+                else:
+                    break
+            except ValueError:
+                print('\nIntroduza uma latitude válida.\n')
 
+        return ponto
+
+    def interromper_via_circulacao(self, from_label: str, to_label: str, Origem: str, Destino: str) -> None:
+        """
+        Interrompe uma via na rede e tenta encontrar um caminho sem passar pela a aresta eliminada
+        :param from_label:
+        :param to_label:
+        :param Origem:
+        :param Destino:
+        :return:
+        """
         self.rede_circulacao.remover_aresta(from_label, to_label)
+        print(self.rede_circulacao.caminhos_possiveis(Origem, Destino))
 
-        return self.rede_circulacao.caminhos_possiveis(from_label, to_label)
+        return None
 
     def obter_itinerario(self, from_label: str, to_label: str):
-
+        """
+        Calcula e mostra o caminho mais curto na rede apartir de 2 pontos
+        :param from_label:
+        :param to_label:
+        :return:
+        """
         print(self.rede_circulacao.calcula_caminho(from_label, to_label))
 
     def gerir_rede_circulacao(self):
+        """
+        Menu para gerir a rede -> Arestas / Vertices
+        :return:
+        """
         while True:
             print(MENU_REDE)
             op = str(input(OPCAO))
@@ -290,37 +341,106 @@ class Sistema:
                 case '0':
                     break
 
-    def gerir_arestas(self):
+    def gerir_arestas(self) -> None:
+        """
+        Menu para gerir arestas da Rede -> Adicionar / Consultar / Remover
+        :return:
+        """
         while True:
             print(MENU_ARESTAS)
             op = str(input(OPCAO))
             match op:
                 case '1':
                     self.listar_pontos()
-                    via = ViaCirculacao()
-                    self.rede_circulacao.adicionar_aresta(from_label, to_label)
+                    from_label = verifica_strings("Vertice Principal")
+                    to_label = verifica_strings("Vertice Adjacente")
+                    velocidade_min = verifica_floats("Velocidade minima da via")
+                    velocidade_max = verifica_floats("Velocidade max da via")
+                    distancia = verifica_floats("Distancia da via")
+                    via = ViaCirculacao(distancia, velocidade_min, velocidade_max)
+                    self.rede_circulacao.adicionar_aresta(from_label, to_label, via)
                 case '2':
-                    self.rede_circulacao.get_edges()
+                    print(self.rede_circulacao.get_edges())
                 case '3':
                     print(str(self.rede_circulacao))
-                    self.rede_circulacao.remover_aresta(from_label, to_label)
+                    from_label = self.verifica_vertices("Vertice principal > ")
+                    to_label = self.verifica_vertices("Vertice adjacente > ")
+                    print(self.rede_circulacao.remover_aresta(from_label, to_label))
                 case '0':
                     break
+        return None
 
-    def gerir_vertices(self):
+    def gerir_vertices(self) -> None:
+        """
+        Menu para gerir vertices da Rede -> Adicionar / Consultar / Remover
+        :return:
+        """
         while True:
             print(MENU_VERTICE)
             op = str(input(OPCAO))
             match op:
                 case '1':
-                    self.rede_circulacao.adicionar_vertice(label)
+                    print("Designações > ", self.pontos_interesse.get_designacoes())
+                    label = self.verifica_ponto("Ponto a adicionar > ")
+                    print(self.rede_circulacao.adicionar_vertice(label))
                 case '2':
-                    self.rede_circulacao.get_vertices()
+                    print(self.rede_circulacao.get_vertices())
                 case '3':
                     print(str(self.rede_circulacao))
-                    self.rede_circulacao.remover_vertice(label)
+                    label = self.verifica_vertices("Vertice a remover > ")
+                    print(self.rede_circulacao.remover_vertice(label))
                 case '0':
                     break
+        return None
+
+    def consultar_pontos_criticos(self):
+        print(self.rede_circulacao.ponto_maios_saidas())
+        print(self.rede_circulacao.ponto_mais_entradas())
+
+    def startup(self) -> None:
+        """
+        É Chamada quando se cria o sistema para importar pontos de interesse e a rede
+        :return:
+        """
+        self.importa_pontos()
+        self.importa_rede()
+        return None
+
+    def importa_pontos(self):
+        """
+        Importa pontos de interesse pré-criados do ficheiro pontos-interesse.json
+        :return:
+        """
+        with open(FICHEIRO_JSON, "r") as f:
+            data = json.load(f)
+            for p in data:
+                ponto = Ponto(data[p]["id"], data[p]["designacao"], data[p]["Morada"], data[p]["Latitude"],
+                              data[p]["Longitude"], data[p]["categoria"], data[p]["acess"], data[p]["visitas"],
+                              data[p]["avaliacao"], data[p]["geo"],
+                              data[p]["Suges"])
+                self.pontos_interesse.add(ponto)
+
+    def importa_rede(self) -> None:
+        """
+        Importa vertices e arestas do Json e cria ligações entre esses pontos
+        :return:
+        """
+        with open(FICHEIRO_REDE, "r") as f:
+            data = json.load(f)
+            for p in data:
+                self.rede_circulacao.adicionar_vertice(data[p]["Origem"])
+                self.rede_circulacao.adicionar_vertice(data[p]["Destino"])
+                via = ViaCirculacao(data[p]["Distancia"], data[p]["Velocidade_min"], data[p]["Velocidade_max"])
+                self.rede_circulacao.adicionar_aresta(data[p]["Origem"], data[p]["Destino"], via)
+        return None
+
+    def consultar_rotas(self, Origem: str):
+        """
+        Mostra as rotas disponiveis entre 2 pontos da Rede
+        :param Origem:
+        :return:
+        """
+        print(self.rede_circulacao.arvore(Origem))
 
     def ordena_pesquisa(self, lista_de_pontos: list) -> list:
         """

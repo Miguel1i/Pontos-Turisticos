@@ -20,6 +20,7 @@ MENU = """──────────── MENU ─────────�
 R = 6371
 
 FICHEIRO_JSON = "../pontos-interesse.json"
+FICHEIRO_REDE = "../ViaCirculacao/rede.json"
 
 OPCAO = "\nOp > "
 ERRO = "\nIntroduza uma opção válida\n"

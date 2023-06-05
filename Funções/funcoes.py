@@ -44,3 +44,5 @@ def verifica_floats(txt: str) -> float:
             print('\nIntroduza uma latitude válida.\n')
 
     return op
+
+

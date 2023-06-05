@@ -43,21 +43,105 @@
   },
   "3": {
     "id": 3,
-    "designacao": "dsds",
-    "Morada": "dsds",
-    "Latitude": 434.0,
-    "Longitude": 343.0,
+    "designacao": "Complexo Municipal de Piscinas da Lagoa",
+    "Morada": "R. da Cidade de New Bedford 27 9560, Lagoa",
+    "Latitude": 37.74190209384724,
+    "Longitude": -25.573815700877432,
     "categoria": [
-      "dfdf"
+      "Lazer"
     ],
     "acess": [
-      "fdsfsd"
+      "Escadas"
     ],
     "geo": [
-      "fdsfds"
+      "Estrada"
     ],
     "Suges": [
-      "fdsf"
+      "Tomar banho"
+    ],
+    "avaliacao": [],
+    "visitas": 0
+  },
+  "4": {
+    "id": 4,
+    "designacao": "Bar Caloura",
+    "Morada": "Rua da Caloura, 20, 9560-211 \u00c1gua de Pau",
+    "Latitude": 37.714202015294745,
+    "Longitude": -25.495177361131084,
+    "categoria": [
+      "Gastronomia"
+    ],
+    "acess": [
+      "Escadas"
+    ],
+    "geo": [
+      "Estrada"
+    ],
+    "Suges": [
+      "Marisco"
+    ],
+    "avaliacao": [],
+    "visitas": 0
+  },
+  "5": {
+    "id": 5,
+    "designacao": "Janela do Inferno",
+    "Morada": "EN5-2A 21, 9560",
+    "Latitude": 37.74765985013985,
+    "Longitude": -25.52742988441227,
+    "categoria": [
+      "Lazer"
+    ],
+    "acess": [
+      "Escadas"
+    ],
+    "geo": [
+      "Estrada"
+    ],
+    "Suges": [
+      "Trilho"
+    ],
+    "avaliacao": [],
+    "visitas": 0
+  },
+  "6": {
+    "id": 6,
+    "designacao": "Macela",
+    "Morada": "S\u00e3o Miguel, Cabouco",
+    "Latitude": 37.76563506659146,
+    "Longitude": -25.527223744659775,
+    "categoria": [
+      "Lazer"
+    ],
+    "acess": [
+      "Escadas"
+    ],
+    "geo": [
+      "Estrada"
+    ],
+    "Suges": [
+      "Trilho"
+    ],
+    "avaliacao": [],
+    "visitas": 0
+  },
+  "7": {
+    "id": 7,
+    "designacao": "Miradouro do Monte Santo",
+    "Morada": "R. do Pico de Cima 26, 3200-000 \u00c1gua de Pau",
+    "Latitude": 37.7185127717853,
+    "Longitude": -25.508424747164973,
+    "categoria": [
+      "Cultura"
+    ],
+    "acess": [
+      "Rampas"
+    ],
+    "geo": [
+      "Estrada"
+    ],
+    "Suges": [
+      "Miradouro"
     ],
     "avaliacao": [],
     "visitas": 0

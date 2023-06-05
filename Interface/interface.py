@@ -1,4 +1,4 @@
-from Pontos.pontointeresse import Ponto
+from pontos.pontointeresse import Ponto
 from constantes.constantes import MENU
 from os import system
 from Funções.funcoes import verifica_strings, verifica_avaliacao, verifica_floats
@@ -59,19 +59,24 @@ def menu(sistema: Sistema):
             case '8':
                 sistema.consultar_rede_circulacao()
             case '9':
-                pass
+                sistema.consultar_pontos_criticos()
             case '10':
                 sistema.listar_pontos()
-                from_label = str(input("Introduza a Designação do Ponto Inicial > "))
-                to_label = str(input("Introduza a Designação do Ponto Final > "))
-                sistema.interromper_via_circulacao(from_label, to_label)
+                print("Introduza dois pontos para interromper a via ")
+                from_label = sistema.verifica_vertices("Ponto Inicial > ")
+                to_label = sistema.verifica_vertices("Ponto Final > ")
+                print("Indique uma origem e um Destino")
+                Origem = sistema.verifica_vertices("Origem > ")
+                Destino = sistema.verifica_vertices("Destino > ")
+                sistema.interromper_via_circulacao(from_label, to_label, Origem, Destino)
             case '11':
                 sistema.listar_pontos()
-                from_label = str(input("Introduza a Designação do Ponto Inicial > "))
-                to_label = str(input("Introduza a Designação do Ponto Final > "))
+                from_label = sistema.verifica_vertices("Ponto Incial")
+                to_label = sistema.verifica_vertices("Ponto Final")
                 sistema.obter_itinerario(from_label, to_label)
             case '12':
-                pass
+                Origem = sistema.verifica_vertices("Origem > ")
+                sistema.consultar_rotas(Origem)
             case '0':
                 sistema.grava()
                 break

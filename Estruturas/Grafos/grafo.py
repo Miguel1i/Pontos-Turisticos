@@ -1,8 +1,7 @@
 import networkx
 from matplotlib import pyplot as p
-
-from Estruturas.Stack.StackInterface import StackInterface
-from ViaCirculação.ViaCirculacao import ViaCirculacao
+from ViaCirculacao.ViaCirculacao import ViaCirculacao
+from Estruturas.Queue.queueinterface import Queue
 
 
 class Grafo:
@@ -10,29 +9,36 @@ class Grafo:
     def __init__(self):
         self._vertices: dict[str, list[list[str, ViaCirculacao]]] = {}
 
-    def adicionar_vertice(self, label: str) -> None:
+    def adicionar_vertice(self, label: str) -> str:
         if label not in self._vertices:
             self._vertices[label] = []
+            return 'Vertice Adicionado'
+        else:
+            return 'O Ponto já se encontra na rede'
 
     def remover_vertice(self, label: str) -> str | None:
         if label in self._vertices:
             for vertice in self._vertices:
                 self.remover_aresta(vertice, label)
             self._vertices.pop(label)
+            return 'Vértice removido com sucesso'
         else:
-            return 'Vértice não percente ao grafo!'
+            return 'Vértice não percente à rede!'
 
-    def adicionar_aresta(self, from_label: str, to_label: str, via: ViaCirculacao) -> None:
+    def adicionar_aresta(self, from_label: str, to_label: str, via: ViaCirculacao) -> str:
         if from_label in self._vertices and to_label in self._vertices:
             if to_label not in self._vertices[from_label]:
                 self._vertices[from_label].append([to_label, via])
+                return 'Aresta adicionada com sucesso'
+            else:
+                return 'Aresta já existe'
 
-    def remover_aresta(self, from_label, to_label) -> str | None:
-        if from_label in self._vertices and to_label in self._vertices:
+    def remover_aresta(self, from_label, to_label) -> str:
+        if (from_label, to_label) in self.get_edges():
             for aresta in self._vertices[from_label]:
                 if to_label in aresta:
                     self._vertices[from_label].remove(aresta)
-
+            return 'Aresta removida com Sucesso'
         else:
             return 'Aresta inválida!'
 
@@ -112,24 +118,37 @@ class Grafo:
                 return aresta[1].get_velocidade_media_circulacao()
 
     def caminhos_possiveis(self, from_label, to_label):
+        """
+        Retorna todos os caminhos possiveis entre 2 pontos da rede
+        :param from_label:
+        :param to_label:
+        :return caminhos:
+        """
 
         fila = [[from_label]]
         caminhos = []
+        if from_label in self._vertices and to_label in self._vertices:
+            while fila:
+                caminho_atual = fila.pop(0)
+                vertice_atual = caminho_atual[-1]
 
-        while fila:
-            caminho_atual = fila.pop(0)
-            vertice_atual = caminho_atual[-1]
+                if vertice_atual == to_label:
+                    caminhos.append(caminho_atual)
 
-            if vertice_atual == to_label:
-                caminhos.append(caminho_atual)
+                for lista in self._vertices[vertice_atual]:
+                    if lista[0] not in caminho_atual:
+                        fila.append(caminho_atual + [lista[0]])
 
-            for lista in self._vertices[vertice_atual]:
-                if lista[0] not in caminho_atual:
-                    fila.append(caminho_atual + [lista[0]])
+            return caminhos
 
-        return caminhos
+    def calcula_caminho(self, from_label, to_label) -> dict | str:
 
-    def calcula_caminho(self, from_label, to_label) -> dict:
+        """
+        Retorna o caminho mais curto entre 2 pontos da rede -> CAminho / Distancia(custo) / tempo a pé / tempo de carro
+        :param from_label:
+        :param to_label:
+        :return:
+        """
 
         caminhos_possiveis = self.caminhos_possiveis(from_label, to_label)
         resultado = {}
@@ -143,8 +162,10 @@ class Grafo:
                 tempo_carro += self.get_velocidade_media(caminho[i], caminho[i + 1])
 
             resultado[distancia] = [caminho, tempo_carro]
-
-        menor_custo = min(resultado)
+        if resultado.__len__() > 0:
+            menor_custo = min(resultado)
+        else:
+            return 'Não foi possivel encontrar caminho entre esse pontos'
 
         return {
             "Caminho": resultado[menor_custo][0],
@@ -153,6 +174,101 @@ class Grafo:
             "Tempo estimado de carro": round(menor_custo / (resultado[menor_custo][1] / len(resultado[menor_custo][0])),
                                              2)
         }
+
+    def ponto_maios_saidas(self) -> str:
+        """
+        Retorna o/os pontos que contem mais saidas
+        :return:
+        """
+        maior = {}
+        for vertice in self._vertices:
+            if len(self._vertices[vertice]) not in maior:
+                maior[len(self._vertices[vertice])] = [vertice]
+            else:
+                maior[len(self._vertices[vertice])] += [vertice]
+        return f'{maior[max(maior)]}, {max(maior)}'
+
+    def ponto_mais_entradas(self) -> str:
+        """
+        Retorna o/os pontos que contem mais entradas
+        :return:
+        """
+        maior = {}
+        count = 0
+        for vertice in self._vertices:
+            for aresta in self.get_edges():
+                if vertice in aresta[1]:
+                    count += 1
+            if count not in maior:
+                maior[count] = [vertice]
+            else:
+                maior[count] += [vertice]
+            count = 0
+        return f'{maior[max(maior)]}, {max(maior)}'
+
+
+
+
+
+    def arvore(self, from_label: str) -> None:
+
+        travessia = self.travessia_largura(from_label)
+        g = networkx.DiGraph()
+        g.add_nodes_from(travessia)
+        i = 0
+        while i < len(travessia):
+            adjacentes = self.adjacents(travessia[i])
+
+            arestas = []
+            for adjacente in adjacentes:
+                arestas.append((travessia[i], adjacente))
+
+            g.add_edges_from(arestas)
+            i += 1
+
+        pos = networkx.shell_layout(g)
+        # draw Grafo na forma de arvore
+        networkx.draw(g, pos=pos, with_labels=True, arrows=True)
+        p.show()
+
+    def travessia_largura(self, vertice_inicial: str) -> list:
+        """
+        Algoritmo de travessia em largura de um grafo.
+        :param vertice_inicial: Vértice por onde irá ser iniciada a travessia.
+        :return:
+            List:
+                []: Caso o vértice não pertencer ao grafo.
+                [travessia]: Lista de vértices visitados.
+        """
+        visitados: list = []  # Lista de vértices visitados.
+
+        # Verifica se o vértice pertence ao grafo.
+        if vertice_inicial in self._vertices.keys():
+
+            # Fila que contém o primeiro vértice.
+            fila: Queue = Queue([vertice_inicial])
+
+            # Enquanto a fila não estiver vazia.
+            while fila:
+                # Remove o vértice da fila.
+                vertice = fila.remove()
+
+                # Se o vértice não estiver na lista de visitados.
+                if vertice not in visitados:
+                    # É adicionado à lista de visitados.
+                    visitados.append(vertice)
+
+                    vizinhos = []  # Lista de vértices ligados ao vértice (vizinhos).
+                    for aresta in self._vertices[vertice]:
+                        vizinhos.append(aresta[0])
+
+                    for vizinho in vizinhos:
+                        # Se o vértice vizinho não estiver contido na lista de vértices visitados.
+                        if vizinho not in visitados:
+                            # É adicionado à fila.
+                            fila.add(vizinho)
+
+        return visitados
 
     def is_empty(self) -> bool:
         return len(self._vertices) == 0
