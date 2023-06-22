@@ -6,7 +6,7 @@ class Ponto:
 
     def __init__(self, id_ponto: int, desigancao: str, morada: str, latitude: float, longitude: float, categoria: list,
                  acessibilidade: Optional['list'], visitas=0, avaliacao=None, geografica=None, sugestoes=None, ):
-        self._id_ponto = id_ponto
+        self._id_ponto: int = id_ponto
         self._desgignacao: str = desigancao
         self._morada: str = morada
         self._coordenada: Coordenada = Coordenada(latitude, longitude)

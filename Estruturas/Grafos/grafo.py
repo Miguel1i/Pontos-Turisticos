@@ -1,6 +1,6 @@
 import networkx
 from matplotlib import pyplot as p
-from ViaCirculação.ViaCirculacao import ViaCirculacao
+from ViaCirculacao.ViaCirculacao import ViaCirculacao
 from Estruturas.Queue.queueinterface import Queue
 
 
@@ -11,6 +11,12 @@ class Grafo:
         Inicializa a classe Grafo.
         """
         self._vertices: dict[str, list[list[str, ViaCirculacao]]] = {}
+
+    def __iter__(self):
+        """
+        Iterador do grafo.
+        """
+        return iter(self._vertices)
 
     def adicionar_vertice(self, label: str) -> str:
         """
@@ -84,7 +90,7 @@ class Grafo:
         else:
             return 'Aresta inválida!'
 
-    def adjacents(self, label: str):
+    def adjacents(self, label: str) -> list[str]:
         """
         Retorna os vértices adjacentes ao vértice dado.
 
@@ -101,7 +107,7 @@ class Grafo:
 
             return adjacentes
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Retorna uma representação em string do grafo.
 
@@ -120,7 +126,7 @@ class Grafo:
         Returns:
             set[str]: O conjunto de rótulos dos vértices.
         """
-        return set(self._vertices.keys())
+        return set(self._vertices)
 
     def get_edges(self) -> set[tuple[str, list[str, ViaCirculacao]]]:
         """
@@ -136,6 +142,15 @@ class Grafo:
                     edges.add((v, adj))
 
         return edges
+
+    def get_grafo(self) -> dict[str, list[list[str, ViaCirculacao]]]:
+        """
+        Retorna um dicionário com os vértices e arestas do grafo.
+
+        Returns:
+            dict[str, list[list[str, ViaCirculacao]]]: O dicionário de vértices e arestas do grafo.
+        """
+        return self._vertices
 
     def draw_graph(self) -> None:
         """
@@ -220,8 +235,8 @@ class Grafo:
             dict | str: Um dicionário contendo informações sobre o caminho mais curto ou uma mensagem de erro.
         """
 
-        caminhos_possiveis = self.caminhos_possiveis(from_label, to_label)
-        resultado = {}
+        caminhos_possiveis: list = self.caminhos_possiveis(from_label, to_label)
+        resultado: dict = {}
 
         for caminho in caminhos_possiveis:
 
@@ -232,53 +247,60 @@ class Grafo:
                 tempo_carro += self.get_velocidade_media(caminho[i], caminho[i + 1])
 
             resultado[distancia] = [caminho, tempo_carro]
-        if resultado.__len__() > 0:
-            menor_custo = min(resultado)
-        else:
+
+        if len(resultado) <= 0:
             return 'Não foi possivel encontrar caminho entre esse pontos'
 
-        return {
-            "Caminho": resultado[menor_custo][0],
-            "Distância": menor_custo,
-            "Tempo estimado a pé": round(menor_custo / 5, 2),
-            "Tempo estimado de carro": round(menor_custo / (resultado[menor_custo][1] / len(resultado[menor_custo][0])),
-                                             2)
-        }
+        chaves: list = list(resultado.keys())
+        for i in range(1, len(chaves)):
+            chave = chaves[i]
+            j = i - 1
+            while j >= 0 and chave > chaves[j]:
+                chaves[j + 1] = chaves[j]
+                j -= 1
+            chaves[j + 1] = chave
 
-    def ponto_mais_saidas(self) -> str:
+        resultado_ordenado: dict = {}
+        for chave in chaves:
+            resultado_ordenado[chave] = resultado[chave]
+
+        return resultado_ordenado
+
+    def pontos_saidas(self) -> dict[int, list[str]]:
         """
         Retorna o(s) ponto(s) que contém mais saídas.
 
         Returns:
             str: O(s) ponto(s) que contém mais saídas.
         """
-        maior = {}
-        for vertice in self._vertices:
-            if len(self._vertices[vertice]) not in maior:
-                maior[len(self._vertices[vertice])] = [vertice]
-            else:
-                maior[len(self._vertices[vertice])] += [vertice]
-        return f'{maior[max(maior)]}, {max(maior)}'
+        pontos = {}
 
-    def ponto_mais_entradas(self) -> str:
+        for vertice in self._vertices:
+            if len(self._vertices[vertice]) not in pontos:
+                pontos[len(self._vertices[vertice])] = [vertice]
+            else:
+                pontos[len(self._vertices[vertice])] += [vertice]
+        return pontos
+
+    def pontos_entradas(self) -> dict[int, list[str]]:
         """
         Retorna o(s) ponto(s) que contém mais entradas.
 
         Returns:
             str: O(s) ponto(s) que contém mais entradas.
         """
-        maior = {}
+        pontos = {}
         count = 0
         for vertice in self._vertices:
             for aresta in self.get_edges():
                 if vertice in aresta[1]:
                     count += 1
-            if count not in maior:
-                maior[count] = [vertice]
+            if count not in pontos:
+                pontos[count] = [vertice]
             else:
-                maior[count] += [vertice]
+                pontos[count] += [vertice]
             count = 0
-        return f'{maior[max(maior)]}, {max(maior)}'
+        return pontos
 
     def arvore(self, from_label: str) -> None:
         """

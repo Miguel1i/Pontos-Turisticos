@@ -10,7 +10,7 @@ class Queue:
         Args:
             sourcecollection (iterável): Coleção de elementos para inicializar a fila. Padrão: None.
         """
-        self._queue = []
+        self._queue: list = []
         if sourcecollection is not None:
             for item in sourcecollection:
                 self._queue.append(item)
@@ -77,3 +77,23 @@ class Queue:
             O número de elementos na fila.
         """
         return len(self._queue)
+
+    def clear(self) -> None:
+        """
+        Remove todos os elementos da fila.
+        """
+        self._queue = []
+
+    def get_max(self) -> int:
+        """
+        Retorna o elemento com o maior valor na fila.
+
+        Returns:
+            O elemento com o maior valor na fila.
+        """
+
+        maximo = 0
+        for i in range(0, len(self._queue) - 1):
+            if self._queue[i].get_id_ticket() > maximo:
+                maximo = self._queue[i].get_id_ticket()
+        return maximo + 1

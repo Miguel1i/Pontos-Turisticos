@@ -1,9 +1,10 @@
-from pontos.pontointeresse import Ponto
-from constantes.constantes import MENU
+from Pontos.pontointeresse import Ponto
+from constantes.constantes import MENU, SOBRE
 from os import system
 from Funções.funcoes import verifica_strings, verifica_avaliacao, verifica_floats
 import time
 from Sistema.sistema import Sistema
+from Ticket.Ticket import Ticket
 
 
 def menu(sistema: Sistema):
@@ -13,7 +14,7 @@ def menu(sistema: Sistema):
         match ans:
             case '1':
                 system('cls')
-                _id: int = sistema.get_last_id() + 1
+                _id: int = sistema.get_last_id("Pontos")
                 designacao: str = verifica_strings("Designação > ")
                 morada: str = verifica_strings("Morada > ")
                 latitude: float = verifica_floats("Latitude > ")
@@ -35,6 +36,7 @@ def menu(sistema: Sistema):
                 sistema.alterar(_id)
             case '3':
                 system('cls')
+                print(sistema.get_categorias())
                 categoria = verifica_strings("Categoria > ")
                 sistema.pesquisar_pontos(categoria)
             case '4':
@@ -55,28 +57,51 @@ def menu(sistema: Sistema):
                 longitude = verifica_floats("Longitude > ")
                 sistema.obter_sugestoes(latitude, longitude)
             case '7':
+                system('cls')
                 sistema.gerir_rede_circulacao()
             case '8':
+                system('cls')
                 sistema.consultar_rede_circulacao()
             case '9':
+                system('cls')
                 sistema.consultar_pontos_criticos()
             case '10':
-                sistema.listar_pontos()
+                system('cls')
+                print(sistema.rede_circulacao.get_edges())
                 print("Introduza dois pontos para interromper a via ")
-                from_label = sistema.verifica_vertices("Ponto Inicial > ")
-                to_label = sistema.verifica_vertices("Ponto Final > ")
+                while True:
+                    from_label = sistema.verifica_vertices("Ponto Inicial > ")
+                    to_label = sistema.verifica_vertices("Ponto Final > ")
+
+                    if (from_label, to_label) not in sistema.rede_circulacao.get_edges():
+                        print("Introduza um ponto de origem e destino válidos")
+                    else:
+                        break
                 print("Indique uma origem e um Destino")
-                Origem = sistema.verifica_vertices("Origem > ")
-                Destino = sistema.verifica_vertices("Destino > ")
-                sistema.interromper_via_circulacao(from_label, to_label, Origem, Destino)
+                origem = sistema.verifica_vertices("Origem > ")
+                destino = sistema.verifica_vertices("Destino > ")
+                sistema.interromper_via_circulacao(from_label, to_label, origem, destino)
             case '11':
+                system('cls')
                 sistema.listar_pontos()
-                from_label = sistema.verifica_vertices("Ponto Incial")
-                to_label = sistema.verifica_vertices("Ponto Final")
+                from_label = sistema.verifica_vertices("Ponto Incial > ")
+                to_label = sistema.verifica_vertices("Ponto Final > ")
                 sistema.obter_itinerario(from_label, to_label)
             case '12':
-                Origem = sistema.verifica_vertices("Origem > ")
-                sistema.consultar_rotas(Origem)
+                system('cls')
+                origem = sistema.verifica_vertices("Origem > ")
+                sistema.consultar_rotas(origem)
+            case '14':
+                system('cls')
+                print(SOBRE)
+            case '15':
+                system('cls')
+                id_ticket = sistema.get_last_id("Tickets")
+                nome = input(str("Nome ('' - Anónimo) > "))
+                avaliacao = verifica_avaliacao()
+                mensagem = verifica_strings("Mensagem > ")
+                ticket = Ticket(id_ticket, avaliacao, mensagem, nome)
+                sistema.criar_ticket(ticket)
             case '0':
                 sistema.grava()
                 break

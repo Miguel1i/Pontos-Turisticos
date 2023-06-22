@@ -1,7 +1,5 @@
-import json
-from pontos.pontointeresse import Ponto
+from Pontos.pontointeresse import Ponto
 from typing import Optional
-from constantes.constantes import FICHEIRO_JSON
 
 
 class DoubleNode:
@@ -57,8 +55,7 @@ class LinkedList:
     def __init__(self):
         self._head = None
 
-
-    def add(self, ponto: Ponto):
+    def add(self, ponto: Ponto) -> None:
         """
         Recebe um ponto de interesse e adiciona à linkedlist
         :param ponto:
@@ -74,7 +71,7 @@ class LinkedList:
             cursor.set_next(new_node)
             new_node.set_previous(cursor)
 
-    def print_lista(self):
+    def print_lista(self) -> None:
         """
         Precorre pela linkedlist e dá print a todos os pontos de interesse
         :return:
@@ -88,7 +85,7 @@ class LinkedList:
                 print()
                 cursor = cursor.get_next()
 
-    def get_designacoes(self):
+    def get_designacoes(self) -> list[str]:
         design = []
         cursor = self._head
         while cursor is not None:
@@ -111,9 +108,9 @@ class LinkedList:
         if cursor:
             return cursor.get_data()
 
-    def pesquisa_designacao(self, design: str) -> bool:
+    def pesquisa_designacao(self, design: str) -> tuple[bool, Ponto | None]:
         """
-
+        Dado um determinado designação retorna a data do ponto interesse em questão
         :param design:
         :return:
         """
@@ -125,23 +122,25 @@ class LinkedList:
             cursor = cursor.get_next()
 
         if cursor:
-            return True
+            return True, cursor.get_data()
+        else:
+            return False, None
 
     def get_last_id(self) -> int:
         """
         Vai até ao final da linkedlist e retorna o id do ultimo ponto de interesse
         :return:
         """
-        max = 0
+        _max = 0
         cursor = self._head
         if self._head is None:
             return 0
         else:
             while cursor.get_next() is not None:
-                if cursor.get_data().get_id() > max:
-                    max = cursor.get_data().get_id()
+                if cursor.get_data().get_id() > _max:
+                    _max = cursor.get_data().get_id()
                 cursor = cursor.get_next()
-            return cursor.get_data().get_id()
+            return cursor.get_data().get_id() + 1
 
     def get_head(self) -> DoubleNode | None:
         """

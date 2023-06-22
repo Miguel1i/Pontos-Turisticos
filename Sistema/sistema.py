@@ -1,12 +1,15 @@
 import json
+import matplotlib.pyplot as plt
 from Pontos.pontointeresse import Ponto
-from ViaCirculação.ViaCirculacao import ViaCirculacao
+from ViaCirculacao.ViaCirculacao import ViaCirculacao
 from Estruturas.Grafos.grafo import Grafo
 from Estruturas.DoubleNode.doublenode import LinkedList
 from constantes.constantes import FICHEIRO_JSON, R, MENU_CAT, MENU_ACESS, MENU_ALT, ERRO, OPCAO, MENU_ARESTAS, \
-    MENU_REDE, MENU_VERTICE, FICHEIRO_REDE
-from Funções.funcoes import verifica_strings, verifica_floats, verifica_ints
+    MENU_REDE, MENU_VERTICE, FICHEIRO_REDE, FICHEIRO_TICKET
+from Funções.funcoes import verifica_strings, verifica_ints
 import math as m
+from Ticket.Ticket import Ticket
+from Estruturas.Queue.queueinterface import Queue
 
 
 class Sistema:
@@ -15,9 +18,10 @@ class Sistema:
         Inicializa uma nova instância da classe Sistema com uma lista encadeada vazia para armazenar
         os pontos de interesse.
         """
-        self.pontos_interesse = LinkedList()
-        self._categorias = ('natureza', 'gastronomia', 'lazer', 'cultura')
-        self.rede_circulacao = Grafo()
+        self.pontos_interesse: LinkedList = LinkedList()
+        self._categorias: tuple = ('natureza', 'gastronomia', 'lazer', 'cultura')
+        self.rede_circulacao: Grafo = Grafo()
+        self.tickets: Queue = Queue()
 
     # Pontos
     def adicionar_ponto(self, ponto: Ponto) -> None:
@@ -98,10 +102,12 @@ class Sistema:
         :return: None.
         """
         cursor = self.pontos_interesse.get_head()
+        classificacoes = []
         while cursor is not None:
             ponto = cursor.get_data()
             if len(cursor.get_data().get_avaliacao()) > 0:
                 media = sum(cursor.get_data().get_avaliacao()) / len(cursor.get_data().get_avaliacao())
+                classificacoes.append(media)
                 print(
                     f'\nID: {ponto.get_id()} \nDesignação: {ponto.get_designacao()} \nMorada: {ponto.get_morada()}'
                     f'\nSugestões: {str(ponto.get_sugestoes())} '
@@ -112,6 +118,14 @@ class Sistema:
                     f' \nSugestões: {str(ponto.get_sugestoes())} '
                     f'\nMédia: {0} \nVisitas: {ponto.get_visitas()}\n')
             cursor = cursor.get_next()
+
+        escala = [i for i in range(1, 5)]
+        contagem_classificacoes = [classificacoes.count(valor) for valor in escala]
+        plt.scatter(escala, contagem_classificacoes)
+        plt.xlabel('Classificação')
+        plt.ylabel('Número de Pontos de Interesse')
+        plt.title('Distribuição dos Pontos de Interesse por Classificação')
+        plt.show()
 
     def obter_sugestoes(self, latitude: float, longitude: float) -> None:
         """
@@ -151,18 +165,27 @@ class Sistema:
         if flag == 1:
             print('Não existe nenhum Ponto de Interesse perto.')
 
-    def get_last_id(self) -> int:
+    def get_last_id(self, filtro: str) -> int:
         """
         Método de obtenção do último ‘ID’ atribuído a um ponto de interesse.
         :return: O último ‘ID’ atribuído a um ponto de interesse.
         """
-        return self.pontos_interesse.get_last_id()
+        if filtro == 'Pontos':
+            return self.pontos_interesse.get_last_id()
+        elif filtro == 'Tickets':
+            return self.tickets.get_max()
 
-    def verifica_ponto(self, txt: str):
+    def verifica_ponto(self, txt: str) -> str:
+        """
+        Verifica se o ponto existe
+        :param txt:
+        :return: str: Ponto
+        """
         while True:
             try:
                 ponto = str(input(txt))
-                if not self.pontos_interesse.pesquisa_designacao(ponto):
+                ponto_encontrado = self.pontos_interesse.pesquisa_designacao(ponto)[0]
+                if not ponto_encontrado:
                     print("Introduza um Ponto válido")
                 else:
                     break
@@ -170,10 +193,10 @@ class Sistema:
                 print('\nIntroduza uma latitude válida.\n')
         return ponto
 
-    def grava(self):
+    def grava(self) -> None:
         """
         Grava as alterações feitas aos pontos de interesse no ficheiro json
-        :return:
+        :return: None.
         """
         cursor = self.pontos_interesse.get_head()
         with open(FICHEIRO_JSON, "r") as f:
@@ -197,12 +220,41 @@ class Sistema:
         with open(FICHEIRO_JSON, "w") as file:
             json.dump(data, file, indent=2)
 
+        with open(FICHEIRO_REDE, "r") as f_rede:
+            data_rede = json.load(f_rede)
+            data_rede.clear()
+            rede = self.rede_circulacao.get_grafo()
+            for vertice in rede:
+                for aresta in rede[vertice]:
+                    data_rede.update({str(vertice): {"Origem": str(vertice),
+                                                     "Destino": str(aresta[0]),
+                                                     "Distancia": int(aresta[1].get_distancia()),
+                                                     "Velocidade_min": int(aresta[1].get_velocidade_min()),
+                                                     "Velocidade_max": int(aresta[1].get_velocidade_max()),
+                                                     }})
+
+        with open(FICHEIRO_REDE, "w") as file_rede:
+            json.dump(data_rede, file_rede, indent=2)
+
+        with open(FICHEIRO_TICKET, "r") as f_ticket:
+            data_ticket = json.load(f_ticket)
+            data_ticket.clear()
+            for ticket in self.tickets:
+                data_ticket.update({str(ticket.get_id_ticket()): {"id": int(ticket.get_id_ticket()),
+                                                                  "nome": str(ticket.get_nome()),
+                                                                  "avaliacao": int(ticket.get_avaliacao()),
+                                                                  "mensagem": str(ticket.get_mensagem())
+                                                                  }})
+
+        with open(FICHEIRO_TICKET, "w") as file_ticket:
+            json.dump(data_ticket, file_ticket, indent=2)
+
     def alterar(self, _id: int):
         """
         Menu de alterações do ponto de interesse que corresponde ao id em questão
         É possivel alterar as categorias e os meios de acesso
-        :param _id:
-        :return:
+        :param _id: id do ponto de interesse
+        :return: None
         """
         while True:
             print(MENU_ALT)
@@ -220,8 +272,8 @@ class Sistema:
     def alterar_cat(self, _id: int) -> None:
         """
         Menu de alteração de categorias
-        :param _id:
-        :return:
+        :param _id: id do ponto de interesse
+        :return: None
         """
         while True:
             print(MENU_CAT)
@@ -251,8 +303,8 @@ class Sistema:
     def altera_acessibilidade(self, _id: int) -> None:
         """
         Menu de alteração de acessos
-        :param _id:
-        :return:
+        :param _id: id do ponto de interesse
+        :return: None
         """
         while True:
             print(MENU_ACESS)
@@ -276,19 +328,50 @@ class Sistema:
                 case _:
                     print("\nIntroduza uma opção válida\n")
 
+    def criar_ticket(self, ticket: Ticket) -> None:
+        """
+        Cria um ticket.
+        :param ticket: feedback do utilizador.
+        :return: None
+        """
+        self.tickets.add(ticket)
+        tickets = []
+        for ticket in self.tickets:
+            tickets.append(ticket)
+        self.tickets.clear()
+
+        for i in range(1, len(tickets)):
+            chave = tickets[i]
+            k = i
+            while k > 0 and chave.get_avaliacao() > tickets[k - 1].get_avaliacao():
+                tickets[k] = tickets[k - 1]
+                k -= 1
+            tickets[k] = chave
+
+        for j in tickets:
+            self.tickets.add(j)
+            print(j)
+
+    def get_categorias(self) -> tuple:
+        """
+        Devolve as categorias existentes.
+        :return: tuple
+        """
+        return self._categorias
+
     # Rede Circulacao
     def consultar_rede_circulacao(self) -> None:
         """
-        
-        :return:
+        Consulta a rede de circulação.
+        :return: None
         """
         self.rede_circulacao.draw_graph()
 
     def verifica_vertices(self, txt: str) -> str:
         """
         Função de input que vertifica se o ponto introduzido se encontra na Rede
-        :param txt:
-        :return:
+        :param txt: texto a apresentar
+        :return: ponto
         """
         while True:
             try:
@@ -305,30 +388,38 @@ class Sistema:
     def interromper_via_circulacao(self, from_label: str, to_label: str, origem: str, destino: str) -> None:
         """
         Interrompe uma via na rede e tenta encontrar um caminho sem passar pela a aresta eliminada
-        :param from_label:
-        :param to_label:
-        :param origem:
-        :param destino:
-        :return:
+        :param from_label: ponto de partida
+        :param to_label: ponto de chegada
+        :param origem: ponto de partida
+        :param destino:  ponto de chegada
+        :return: None
         """
         self.rede_circulacao.remover_aresta(from_label, to_label)
-        print(self.rede_circulacao.caminhos_possiveis(origem, destino))
+        print(self.rede_circulacao.calcula_caminho(origem, destino))
 
         return None
 
-    def obter_itinerario(self, from_label: str, to_label: str):
+    def obter_itinerario(self, from_label: str, to_label: str) -> None:
         """
         Calcula e mostra o caminho mais curto na rede apartir de 2 pontos
-        :param from_label:
-        :param to_label:
-        :return:
+        :param from_label: ponto de partida
+        :param to_label: ponto de chegada
+        :return: None
         """
-        print(self.rede_circulacao.calcula_caminho(from_label, to_label))
+        caminhos: dict = self.rede_circulacao.calcula_caminho(from_label, to_label)
+        menor_custo: int = min(caminhos)
+        print({
+            "Caminho": caminhos[menor_custo][0],
+            "Distância": menor_custo,
+            "Tempo estimado a pé": round(menor_custo / 5, 2),
+            "Tempo estimado de carro": round(menor_custo / (caminhos[menor_custo][1] / len(caminhos[menor_custo][0])),
+                                             2)
+        })
 
-    def gerir_rede_circulacao(self):
+    def gerir_rede_circulacao(self) -> None:
         """
         Menu para gerir a rede -> Arestas / Vertices
-        :return:
+        :return: None
         """
         while True:
             print(MENU_REDE)
@@ -352,11 +443,11 @@ class Sistema:
             match op:
                 case '1':
                     self.listar_pontos()
-                    from_label = verifica_strings("Vertice Principal")
-                    to_label = verifica_strings("Vertice Adjacente")
-                    velocidade_min = verifica_ints("Velocidade minima da via")
-                    velocidade_max = verifica_ints("Velocidade max da via")
-                    distancia = verifica_floats("Distancia da via")
+                    from_label = self.verifica_vertices("Vertice Principal > ")
+                    to_label = self.verifica_vertices("Vertice Adjacente > ")
+                    velocidade_min = verifica_ints("Velocidade minima da via > ")
+                    velocidade_max = verifica_ints("Velocidade max da via > ")
+                    distancia = int(self.get_distancia(from_label, to_label))
                     via = ViaCirculacao(distancia, velocidade_min, velocidade_max)
                     self.rede_circulacao.adicionar_aresta(from_label, to_label, via)
                 case '2':
@@ -393,17 +484,62 @@ class Sistema:
                     break
         return None
 
-    def consultar_pontos_criticos(self):
-        print(self.rede_circulacao.ponto_mais_saidas())
-        print(self.rede_circulacao.ponto_mais_entradas())
+    def consultar_pontos_criticos(self) -> None:
+        """
+        Consulta os pontos criticos da rede
+        :return: None
+        """
+        pontos_saidas: dict = self.rede_circulacao.pontos_saidas()
+        pontos_entradas: dict = self.rede_circulacao.pontos_entradas()
+
+        # Ordenação por ordem decresente os pontos de entrada e saida
+
+        chaves_saidas: list = list(pontos_saidas.keys())
+        chaves_entradas: list = list(pontos_entradas.keys())
+
+        for i in range(1, len(chaves_saidas)):
+            chave = chaves_saidas[i]
+            j = i - 1
+            while j >= 0 and chave > chaves_saidas[j]:
+                chaves_saidas[j + 1] = chaves_saidas[j]
+                j -= 1
+            chaves_saidas[j + 1] = chave
+
+        for j in range(1, len(chaves_entradas)):
+            chave = chaves_entradas[j]
+            i = j - 1
+            while i >= 0 and chave > chaves_entradas[i]:
+                chaves_entradas[i + 1] = chaves_entradas[i]
+                i -= 1
+            chaves_entradas[i + 1] = chave
+
+        pontos_saidas_ordenados: dict = {}
+        for i in chaves_saidas:
+            pontos_saidas_ordenados[i] = pontos_saidas[i]
+        pontos_entradas_ordenados: dict = {}
+        for i in chaves_entradas:
+            pontos_entradas_ordenados[i] = pontos_entradas[i]
+
+        print(" *- Entradas -*")
+        for i in pontos_entradas_ordenados:
+            print(f"{i}: {pontos_entradas_ordenados[i]}")
+        print("\n*- Saidas -*")
+        for i in pontos_saidas_ordenados:
+            print(f"{i}: {pontos_saidas_ordenados[i]}")
+        print()
+        maior_interno = max(pontos_entradas_ordenados)
+        maior_externo = max(pontos_saidas_ordenados)
+        print("Ponto(s) de entrada mais critico(s): ", maior_interno)
+        print("Ponto(s) de saida mais critico(s): ", maior_externo)
 
     def startup(self) -> None:
         """
-        É Chamada quando se cria o sistema para importar pontos de interesse e a rede
+        É Chamada quando se cria o sistema para importar pontos de interesse, rede e tickets.
         :return:
         """
         self.importa_pontos()
         self.importa_rede()
+        self.importa_ticket()
         return None
 
     def importa_pontos(self):
@@ -434,13 +570,30 @@ class Sistema:
                 self.rede_circulacao.adicionar_aresta(data[p]["Origem"], data[p]["Destino"], via)
         return None
 
+    def importa_ticket(self) -> None:
+        """
+        Importa tickets do Json.
+        :return: None
+        """
+        with open(FICHEIRO_TICKET, "r") as f:
+            data = json.load(f)
+            for t in data:
+                ticket = Ticket(data[t]["id"], data[t]["avaliacao"], data[t]["mensagem"], data[t]["nome"])
+                self.tickets.add(ticket)
+        return None
+
     def consultar_rotas(self, origem: str):
         """
         Mostra as rotas disponiveis entre 2 pontos da Rede
         :param origem:
         :return:
         """
-        print(self.rede_circulacao.arvore(origem))
+        travessia = self.rede_circulacao.travessia_largura(origem)
+        for vertice in travessia:
+            ponto = self.pontos_interesse.pesquisa_designacao(vertice)[1]
+            print(str(ponto))
+
+        self.rede_circulacao.arvore(origem)
 
     def ordena_pesquisa(self, lista_de_pontos: list) -> list:
         """
@@ -498,3 +651,27 @@ class Sistema:
                 k += 1
 
         return lista_de_pontos
+
+    def get_distancia(self, origem: str, destino: str) -> float:
+        """
+        Calcula a distancia entre 2 pontos da Rede
+        :param origem:
+        :param destino:
+        :return:
+        """
+        ponto_origem = self.pontos_interesse.pesquisa_designacao(origem)[1]
+        ponto_destino = self.pontos_interesse.pesquisa_designacao(destino)[1]
+
+        latitude_origem = ponto_origem.get_coordenadas().get_latitude()
+        longitude_origem = ponto_origem.get_coordenadas().get_longitude()
+        latitude_destino = ponto_destino.get_coordenadas().get_latitude()
+        longitude_destino = ponto_destino.get_coordenadas().get_longitude()
+
+        lat_diference = m.radians(latitude_origem - latitude_destino)
+        lon_diference = m.radians(longitude_origem - longitude_destino)
+        lat1 = m.radians(latitude_origem)
+        lat2 = m.radians(latitude_destino)
+        a = m.sin(lat_diference / 2) ** 2 + m.cos(lat1) * m.cos(lat2) * m.sin(lon_diference / 2) ** 2
+        c = 2 * m.asin(m.sqrt(a))
+        d = R * c
+        return d
