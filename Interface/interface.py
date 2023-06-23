@@ -1,4 +1,4 @@
-from Pontos.pontointeresse import Ponto
+from pontos.pontointeresse import Ponto
 from constantes.constantes import MENU, SOBRE
 from os import system
 from Funções.funcoes import verifica_strings, verifica_avaliacao, verifica_floats
@@ -68,19 +68,26 @@ def menu(sistema: Sistema):
             case '10':
                 system('cls')
                 print(sistema.rede_circulacao.get_edges())
-                print("Introduza dois pontos para interromper a via ")
                 while True:
-                    from_label = sistema.verifica_vertices("Ponto Inicial > ")
-                    to_label = sistema.verifica_vertices("Ponto Final > ")
-
-                    if (from_label, to_label) not in sistema.rede_circulacao.get_edges():
-                        print("Introduza um ponto de origem e destino válidos")
-                    else:
+                    quant_vias = int(input("Quantas vias deseja interromper > "))
+                    if quant_vias <= len(sistema.rede_circulacao.get_edges()):
                         break
-                print("Indique uma origem e um Destino")
-                origem = sistema.verifica_vertices("Origem > ")
-                destino = sistema.verifica_vertices("Destino > ")
-                sistema.interromper_via_circulacao(from_label, to_label, origem, destino)
+                    else:
+                        print("Não existe essa quantidade de vias disponiveis")
+                for i in range(quant_vias):
+                    print(sistema.rede_circulacao.get_edges())
+                    print("Introduza dois pontos para interromper a via ")
+                    while True:
+                        from_label = sistema.verifica_vertices("Ponto Inicial > ")
+                        to_label = sistema.verifica_vertices("Ponto Final > ")
+                        if (from_label, to_label) not in sistema.rede_circulacao.get_edges():
+                            print("Introduza um ponto de origem e destino válidos")
+                        else:
+                            break
+                    print("Indique uma origem e um Destino")
+                    origem = sistema.verifica_vertices("Origem > ")
+                    destino = sistema.verifica_vertices("Destino > ")
+                    sistema.interromper_via_circulacao(from_label, to_label, origem, destino)
             case '11':
                 system('cls')
                 sistema.listar_pontos()
@@ -89,8 +96,18 @@ def menu(sistema: Sistema):
                 sistema.obter_itinerario(from_label, to_label)
             case '12':
                 system('cls')
-                origem = sistema.verifica_vertices("Origem > ")
-                sistema.consultar_rotas(origem)
+                while True:
+                    pontos_a_ver = int(input("Quantos pontos deseja observar > "))
+                    if pontos_a_ver == len(sistema.rede_circulacao.get_vertices()):
+                        for  vertice in sistema.rede_circulacao.get_vertices():
+                            sistema.consultar_rotas(vertice)
+                    elif pontos_a_ver < len(sistema.rede_circulacao.get_vertices()):
+                        break
+                    else:
+                        print("Não existe essa quantidade de pontos turisticos")
+                for i in range(pontos_a_ver):
+                    origem = sistema.verifica_vertices("Origem > ")
+                    sistema.consultar_rotas(origem)
             case '14':
                 system('cls')
                 print(SOBRE)
