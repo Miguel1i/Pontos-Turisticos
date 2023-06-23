@@ -1,4 +1,4 @@
-from pontos.pontointeresse import Ponto
+from Pontos.pontointeresse import Ponto
 from typing import Optional
 
 

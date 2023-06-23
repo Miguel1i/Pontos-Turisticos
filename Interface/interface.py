@@ -1,4 +1,4 @@
-from pontos.pontointeresse import Ponto
+from Pontos.pontointeresse import Ponto
 from constantes.constantes import MENU, SOBRE
 from os import system
 from Funções.funcoes import verifica_strings, verifica_avaliacao, verifica_floats
@@ -74,7 +74,7 @@ def menu(sistema: Sistema):
                         break
                     else:
                         print("Não existe essa quantidade de vias disponiveis")
-                for i in range(quant_vias):
+                for _ in range(quant_vias):
                     print(sistema.rede_circulacao.get_edges())
                     print("Introduza dois pontos para interromper a via ")
                     while True:
@@ -99,13 +99,13 @@ def menu(sistema: Sistema):
                 while True:
                     pontos_a_ver = int(input("Quantos pontos deseja observar > "))
                     if pontos_a_ver == len(sistema.rede_circulacao.get_vertices()):
-                        for  vertice in sistema.rede_circulacao.get_vertices():
+                        for vertice in sistema.rede_circulacao.get_vertices():
                             sistema.consultar_rotas(vertice)
                     elif pontos_a_ver < len(sistema.rede_circulacao.get_vertices()):
                         break
                     else:
                         print("Não existe essa quantidade de pontos turisticos")
-                for i in range(pontos_a_ver):
+                for _ in range(pontos_a_ver):
                     origem = sistema.verifica_vertices("Origem > ")
                     sistema.consultar_rotas(origem)
             case '14':
