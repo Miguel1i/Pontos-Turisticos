@@ -19,7 +19,11 @@ def menu(sistema: Sistema):
                 morada: str = verifica_strings("Morada > ")
                 latitude: float = verifica_floats("Latitude > ")
                 longitude: float = verifica_floats("Longitude > ")
+                print("\nCategorias: ", sistema.get_categorias())
                 categoria: str = verifica_strings("Categoria > ")
+                if categoria not in sistema.get_categorias():
+                    print("Categoria não existe.\n")
+                    continue
                 access: str = verifica_strings("Acesso > ")
                 geo: str = verifica_strings("Geografica >  ")
                 sugestao: str = verifica_strings("Sugestão > ")
@@ -36,7 +40,7 @@ def menu(sistema: Sistema):
                 sistema.alterar(_id)
             case '3':
                 system('cls')
-                print(sistema.get_categorias())
+                print("Categorias disponiveis: ", sistema.get_categorias())
                 categoria = verifica_strings("Categoria > ")
                 sistema.pesquisar_pontos(categoria)
             case '4':

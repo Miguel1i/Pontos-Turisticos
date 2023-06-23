@@ -281,18 +281,25 @@ class Sistema:
             ponto = self.pontos_interesse.pesquisa(_id)
             match op:
                 case '1':
-                    print("Categorias: ", ponto.get_categoria())
+                    print("Categorias do Ponto: ", ponto.get_categoria())
+                    print("Categorias: ", self._categorias)
                     categoria = verifica_strings("Categoria > ")
+                    if categoria.lower() not in self._categorias:
+                        print("\nNão existe essa Categoria\n")
+                        break
                     nova_categoria = list(ponto.get_categoria())
                     if categoria.lower() not in ponto.get_categoria():
                         nova_categoria.append(categoria)
                         ponto.set_categoria(tuple(nova_categoria))
+                        print("\nCategoria adicionada com sucesso\n")
                 case '2':
+                    print("Categorias do Ponto: ", ponto.get_categoria())
                     categoria = verifica_strings("Categoria > ")
                     nova_categoria = list(ponto.get_categoria())
                     if categoria.lower() in ponto.get_categoria():
                         nova_categoria.remove(categoria)
                         ponto.set_categoria(tuple(nova_categoria))
+                        print("\nCategoria removida com sucesso\n")
                     else:
                         print("\nNão existe essa Categoria que deseja remover\n")
                 case '0':
@@ -312,15 +319,20 @@ class Sistema:
             ponto = self.pontos_interesse.pesquisa(_id)
             match op:
                 case '1':
-                    print("Acessos: ", ponto.get_acessibilidade())
+                    print("Acessos do Ponto: ", ponto.get_acessibilidade())
                     acess = verifica_strings("Acesso > ").lower()
                     if acess not in ponto.get_acessibilidade():
                         ponto.set_acess(acess)
+                        print("Acesso adicionado!")
+                    else:
+                        print("\nEsse acesso já existe\n")
                 case '2':
+                    print("Acessos do Ponto: ", ponto.get_acessibilidade())
                     acess = verifica_strings("Acesso > ").lower()
                     lista = ponto.get_acessibilidade()
                     if acess in lista:
                         lista.remove(acess)
+                        print("Acesso removido!")
                     else:
                         print("\nNão existe esse acesso que deseja remover\n")
                 case '0':
@@ -407,6 +419,9 @@ class Sistema:
         :return: None
         """
         caminhos: dict = self.rede_circulacao.calcula_caminho(from_label, to_label)
+        if caminhos == 'Não há caminhos possíveis entre os pontos.':
+            print('Não há caminhos possíveis entre os pontos.')
+            return None
         menor_custo: int = min(caminhos)
         print({
             "Caminho": caminhos[menor_custo][0],

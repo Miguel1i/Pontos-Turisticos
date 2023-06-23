@@ -140,7 +140,7 @@ class LinkedList:
                 if cursor.get_data().get_id() > _max:
                     _max = cursor.get_data().get_id()
                 cursor = cursor.get_next()
-            return cursor.get_data().get_id() + 1
+            return _max + 1
 
     def get_head(self) -> DoubleNode | None:
         """

@@ -90,28 +90,5 @@
       1
     ],
     "visitas": 1
-  },
-  "5": {
-    "id": 5,
-    "designacao": "Janela do Inferno",
-    "Morada": "EN5-2A 21, 9560",
-    "Latitude": 37.74765985013985,
-    "Longitude": -25.52742988441227,
-    "categoria": [
-      "Lazer"
-    ],
-    "acess": [
-      "Escadas"
-    ],
-    "geo": [
-      "Estrada"
-    ],
-    "Suges": [
-      "Trilho"
-    ],
-    "avaliacao": [
-      3
-    ],
-    "visitas": 1
   }
 }

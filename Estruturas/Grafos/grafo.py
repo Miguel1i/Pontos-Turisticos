@@ -249,7 +249,7 @@ class Grafo:
             resultado[distancia] = [caminho, tempo_carro]
 
         if len(resultado) <= 0:
-            return 'Não foi possivel encontrar caminho entre esse pontos'
+            return 'Não há caminhos possíveis entre os pontos.'
 
         chaves: list = list(resultado.keys())
         for i in range(1, len(chaves)):
